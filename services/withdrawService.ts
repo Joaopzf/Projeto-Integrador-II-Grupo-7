@@ -1,11 +1,11 @@
-import { db } from '../db';
+import pool from '../db';
 
 export const withdrawFundsWithTax = async (userId: number, amount: number, bankDetails: any): Promise<string> => {
     try {
         console.log(`Tentando sacar R$ ${amount} para o usuário ${userId}.`);
 
         // Verifica se a carteira do usuário existe
-        const [rows]: any = await db.execute('SELECT * FROM wallets WHERE user_id = ?', [userId]);
+        const [rows]: any = await pool.execute('SELECT * FROM wallets WHERE user_id = ?', [userId]);
         const walletRow = rows[0];
 
         if (!walletRow) {
@@ -41,14 +41,14 @@ export const withdrawFundsWithTax = async (userId: number, amount: number, bankD
         }
 
         const newBalance = walletRow.balance - totalAmount;
-        await db.execute('UPDATE wallets SET balance = ? WHERE user_id = ?', [newBalance, userId]);
+        await pool.execute('UPDATE wallets SET balance = ? WHERE user_id = ?', [newBalance, userId]);
 
         // Atualiza os detalhes bancários na tabela wallets
-        await db.execute('UPDATE wallets SET bank_name = ?, agency_number = ?, account_number = ?, pix_key = ? WHERE user_id = ?', 
+        await pool.execute('UPDATE wallets SET bank_name = ?, agency_number = ?, account_number = ?, pix_key = ? WHERE user_id = ?', 
         [bankDetails.bank_name, bankDetails.agency_number, bankDetails.account_number, bankDetails.pix_key, userId]);
 
         // Registra a transação na tabela de transações
-        await db.execute('INSERT INTO transactions (user_id, amount, transaction_type) VALUES (?, ?, ?)', [userId, amount, 'retirada']);
+        await pool.execute('INSERT INTO transactions (user_id, amount, transaction_type) VALUES (?, ?, ?)', [userId, amount, 'retirada']);
 
         return `Saque de R$ ${amount} realizado com sucesso. Taxa aplicada: R$ ${taxa}. Saldo atual: R$ ${newBalance}.`;
     } catch (error) {

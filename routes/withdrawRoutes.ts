@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { withdrawFundsWithTax } from '../services/withdrawService';
+import { withdrawFundsWithTax } from '../services/withdrawFunds';
 
 const router: Router = express.Router();
 

@@ -9,9 +9,9 @@ const app = express();
 const port = 3000;
 
 const bancoConfig = {
-    user: 'sophia',
-    password: '743274',
-    connectString: 'localhost/XEPDB1'
+    user: '',
+    password: '',
+    connectString: ''
 };
 
 async function initOracleConnection() {

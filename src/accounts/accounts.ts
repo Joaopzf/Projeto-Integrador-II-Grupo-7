@@ -47,51 +47,6 @@ const createUser = async (user: User): Promise<void> => {
     }
 };
 
-const authenticateUser = async (email: string, senha: string): Promise<string> => {
-    const connection = await oracledb.getConnection();
-
-    try {
-        const result = await connection.execute(
-            `SELECT * FROM usuarios WHERE email = :email AND senha = :senha`,
-            { email, senha }
-        );
-
-        // Verifique se result.rows existe e tem valores
-        if (!result.rows || result.rows.length === 0) {
-            throw new Error('Credenciais inválidas');
-        }
-
-        const user = result.rows[0] as any[];
-
-        // Geração do token de sessão
-        const tokenResult = await connection.execute(
-            `SELECT dbms_random.string('x', 32) AS token FROM dual`
-        );
-
-        // Asserção de tipo adequada para tokenResult.rows como string[][]
-        const rows = tokenResult.rows as unknown as string[][];
-
-        // Verifique se tokenResult.rows existe e tem valores
-        if (!rows || rows.length === 0) {
-            throw new Error('Erro ao gerar o token');
-        }
-
-        // Agora o TypeScript entende corretamente que rows[0][0] é uma string
-        const token = rows[0][0];
-
-        // Atualizando o token no banco de dados
-        await connection.execute(
-            `UPDATE usuarios SET token = :token WHERE email = :email`,
-            { token, email },
-            { autoCommit: true }
-        );
-
-        return token;
-    } finally {
-        await connection.close();
-    }
-};
-
 // Roteador do Express
 const router = express.Router();
 
@@ -110,28 +65,6 @@ router.post('/signUp', async (req: Request, res: Response): Promise<void> => {
                 res.status(409).send(err.message);
             } else {
                 res.status(400).send('Erro ao cadastrar');
-            }
-        } else {
-            res.status(500).send('Erro interno do servidor');
-        }
-    }
-});
-
-// Rota para login do usuário
-router.post('/login', async (req: Request, res: Response): Promise<void> => {
-    const { email, senha } = req.body;
-
-    try {
-        const token = await authenticateUser(email, senha);
-        res.status(200).json({ token });
-    } catch (err: unknown) {
-        console.error('Erro ao autenticar: ', err);
-
-        if (err instanceof Error) {
-            if (err.message === 'Credenciais inválidas') {
-                res.status(401).send('Email ou senha incorretos');
-            } else {
-                res.status(400).send('Erro ao autenticar');
             }
         } else {
             res.status(500).send('Erro interno do servidor');

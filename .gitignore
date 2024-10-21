@@ -1,6 +1,0 @@
-node_modules
-build/
-db.ts
-.env
-.vscode
-package-lock.json

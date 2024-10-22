@@ -32,7 +32,7 @@ Os usuários da plataforma têm duas funções principais: lançar novos eventos
    - Após a data do evento, o moderador confirma o resultado (Sim/Não) e os ganhos são distribuídos proporcionalmente entre os apostadores vencedores, creditando o valor em suas wallets.
 
 ## TECNOLOGIAS UTILIZADAS 
-- **Frontend:** HTML, CSS, JavaScript
+- **Frontend:** HTML, CSS, TypeScript
 - **Backend:** TypeScript e Node.js
 - **Banco de Dados:** MySQL
 

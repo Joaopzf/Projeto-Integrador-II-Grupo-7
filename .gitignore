@@ -1,0 +1,4 @@
+node_modules
+db.ts
+build/
+package-lock.json

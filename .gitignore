@@ -1,3 +1,5 @@
 node_modules
-db.ts
 package-lock.json
+db.ts
+.vscode
+build/

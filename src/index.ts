@@ -1,5 +1,4 @@
 import express from 'express';
-//PARTE 1
 import withdrawRoutes from './routes/withdrawRoutes';
 
 const app = express();

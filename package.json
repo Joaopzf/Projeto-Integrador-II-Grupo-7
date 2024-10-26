@@ -1,14 +1,14 @@
 {
-  "name": "express-template",
+  "name": "projeto-integrador-ii-grupo-7",
   "version": "1.0.0",
+  "description": "Plataforma de Web de Apostas",
   "main": "index.js",
-  "scripts": {
-    "build": "tsc"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "scripts": {
+    "build": "tsc"
+  },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",

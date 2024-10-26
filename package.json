@@ -1,0 +1,28 @@
+{
+  "name": "projeto-integrador-ii-grupo-7",
+  "version": "1.0.0",
+  "description": "Plataforma de Web de Apostas",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.5",
+    "@types/nodemailer": "^6.4.16",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mysql2": "^3.11.3",
+    "nodemailer": "^6.9.15",
+    "nodemon": "^3.1.7"
+  }
+}

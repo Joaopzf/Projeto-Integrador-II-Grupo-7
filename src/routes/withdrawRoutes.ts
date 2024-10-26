@@ -6,12 +6,9 @@ const handleWithdraw = async (req: Request, res: Response): Promise<void> => {
     const { userId, amount, bankDetails } = req.body;
     // Verificação de dados obrigatórios
     if (!userId || !amount || !bankDetails) {
-      res
-        .status(400)
-        .json({
-          error:
-            "Campos obrigatórios ausentes: userId, amount, ou bankDetails.",
-        });
+      res.status(400).json({
+        error: "Campos obrigatórios ausentes: userId, amount, ou bankDetails.",
+      });
       return;
     }
     // Validação para garantir que o valor seja positivo
@@ -23,12 +20,10 @@ const handleWithdraw = async (req: Request, res: Response): Promise<void> => {
     }
     // Validação para garantir que as informações bancárias estejam corretas
     if (!bankDetails.bank_name && !bankDetails.pix_key) {
-      res
-        .status(400)
-        .json({
-          error:
-            "Informe pelo menos um método de recebimento: banco ou chave PIX.",
-        });
+      res.status(400).json({
+        error:
+          "Informe pelo menos um método de recebimento: banco ou chave PIX.",
+      });
       return;
     }
     const message = await withdrawFundsWithTax(userId, amount, bankDetails);

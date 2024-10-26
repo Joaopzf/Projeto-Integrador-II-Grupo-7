@@ -1,13 +1,12 @@
 import express from 'express';
 //PARTE 1
-import withdrawRoutes from './routes/withdrawRoutes';
+import evaluateNewEventRoutes from './routes/evaluateNewEventRoutes';
 
 const app = express();
 app.use(express.json()); // Middleware para parsear JSON
 
-
 // Registrar as rotas
-app.use('/api', withdrawRoutes);
+app.use('/api', evaluateNewEventRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

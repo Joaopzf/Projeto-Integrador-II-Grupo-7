@@ -1,5 +1,5 @@
 node_modules
-package-lock.json
 db.ts
+package-lock.json
 .vscode
 build/

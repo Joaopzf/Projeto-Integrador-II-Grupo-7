@@ -1,5 +1,6 @@
 import express from "express";
 //PARTE 1
+import deleteEventRoutes from "./routes/deleteEventRoutes";
 // Importa as rotas de avaliação
 //PARTE 2
 import addFundsRoutes from "./routes/addFundsRoutes";
@@ -9,6 +10,7 @@ import signUpRoutes from "./routes/signUpRoutes";
 const app = express();
 app.use(express.json()); // Middleware para parsear JSON
 
+app.use("/events", deleteEventRoutes);
 // Registrar as rotas
 
 app.use("/funds", addFundsRoutes);

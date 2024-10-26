@@ -1,9 +1,10 @@
 {
   "name": "projeto-integrador-ii-grupo-7",
   "version": "1.0.0",
-  "description": "Plataforma de Web de Apostas",
+  "description": "Este projeto consiste em uma plataforma de apostas online, onde os usuários podem criar e participar de apostas sobre eventos futuros. Esses eventos podem variar desde resultados de jogos esportivos até acontecimentos como eleições ou eventos naturais, como a erupção de um vulcão.",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
   "author": "",

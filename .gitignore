@@ -3,3 +3,4 @@ db.ts
 package-lock.json
 .vscode
 build/
+.env

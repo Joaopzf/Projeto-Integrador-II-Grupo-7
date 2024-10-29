@@ -3,15 +3,17 @@ import evaluateNewEventRoutes from "./routes/evaluateNewEventRoutes";
 import deleteEventRoutes from "./routes/deleteEventRoutes";
 import addFundsRoutes from "./routes/addFundsRoutes";
 import signUpRoutes from "./routes/signUpRoutes";
+import withdrawRoutes from "./routes/withdrawRoutes";
 
 const app = express();
 app.use(express.json()); // Middleware para parsear JSON
 
 // Registrar as rotas
 app.use("/api", evaluateNewEventRoutes);
-app.use("/events", deleteEventRoutes);
-app.use("/funds", addFundsRoutes);
-app.use("/signup", signUpRoutes);
+app.use("/api", deleteEventRoutes);
+app.use("/api", addFundsRoutes);
+app.use("/api", signUpRoutes);
+app.use("/api", withdrawRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

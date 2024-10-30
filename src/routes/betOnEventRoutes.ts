@@ -1,4 +1,3 @@
-// src/routes/betOnEventRoutes.ts
 import express, { Request, Response, Router } from "express";
 import { betOnEvent } from "../services/betOnEvent";
 

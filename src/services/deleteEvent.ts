@@ -1,4 +1,3 @@
-// src/services/deleteEvent.ts
 import pool from "../db/mysql";
 
 export const deleteEvent = async (

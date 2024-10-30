@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { addFunds } from '../services/addFunds'; // Certifique-se de que esse caminho está correto.
+import { addFunds } from '../services/addFunds'; 
 
 const router: Router = express.Router();
 

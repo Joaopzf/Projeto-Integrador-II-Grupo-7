@@ -57,7 +57,7 @@ export const finishEvent = async ({
 
     // Se não houver vencedores, apenas finalize o evento e retorne uma mensagem
     if (totalVencedores[0].total_vencedores === null) {
-      return "Evento finalizado, mas não há vencedores para distribuir os fundos."; // Mensagem apropriada
+      return "Evento finalizado, mas não há vencedores para distribuir os fundos."; 
     }
 
     // Atualiza as carteiras dos vencedores proporcionalmente

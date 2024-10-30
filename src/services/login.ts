@@ -18,7 +18,6 @@ export const loginUser = async (
       throw new Error("Usuário não encontrado.");
     }
 
-    // Verifica a senha (sem bcrypt, já que está em texto puro)
     if (user.password !== password) {
       throw new Error("Senha incorreta.");
     }

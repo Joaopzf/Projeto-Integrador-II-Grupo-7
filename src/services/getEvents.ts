@@ -1,4 +1,3 @@
-// src/services/getEvents.ts
 import pool from "../db/mysql"; // Importando o pool de conexão
 
 export const getEvents = async (status?: string): Promise<any[]> => {

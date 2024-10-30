@@ -1,4 +1,4 @@
-import pool from "../db"; // Importando o pool de conexão
+import pool from "../db/mysql"; // Importando o pool de conexão
 
 export const betOnEvent = async (
   email: string,

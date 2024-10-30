@@ -1,4 +1,4 @@
-import pool from "../db";
+import pool from "../db/mysql";
 
 export interface FinishEventDetails {
   eventId: number;

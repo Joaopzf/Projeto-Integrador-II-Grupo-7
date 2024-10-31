@@ -1,10 +1,10 @@
 import pool from "../db/mysql";
 
 export interface BankDetails {
-  bank_name: string;
-  agency_number: string;
-  account_number: string;
-  pix_key: string;
+  bank_name?: string; // Campos opcionais
+  agency_number?: string;
+  account_number?: string;
+  pix_key?: string;
 }
 
 export const addFunds = async (
@@ -28,24 +28,51 @@ export const addFunds = async (
       throw new Error("Carteira não encontrada.");
     }
 
-    // Adiciona o valor à carteira
-    const newBalance = walletRow.balance + amount;
+    // Verifica se pelo menos os dados bancários ou a chave PIX foram fornecidos
+    const hasBankDetails = bankDetails.bank_name && bankDetails.agency_number && bankDetails.account_number;
+    const hasPixKey = bankDetails.pix_key;
+
+    if (!hasBankDetails && !hasPixKey) {
+      throw new Error("É necessário fornecer dados bancários ou uma chave PIX.");
+    }
+
+    // Verifica se todos os detalhes bancários estão presentes se eles forem fornecidos
+    if (hasBankDetails && (!bankDetails.bank_name || !bankDetails.agency_number || !bankDetails.account_number)) {
+      throw new Error("Informe todos os detalhes bancários: bank_name, agency_number e account_number.");
+    }
+
+    // Converte o saldo atual para número antes de adicionar
+    const currentBalance = parseFloat(walletRow.balance);
+    const newBalance = currentBalance + amount;
+
     await pool.execute("UPDATE wallets SET balance = ? WHERE user_id = ?", [
       newBalance,
       userId,
     ]);
 
-    // Atualiza os detalhes bancários na tabela wallets
-    await pool.execute(
-      "UPDATE wallets SET bank_name = ?, agency_number = ?, account_number = ?, pix_key = ? WHERE user_id = ?",
-      [
-        bankDetails.bank_name,
-        bankDetails.agency_number,
-        bankDetails.account_number,
-        bankDetails.pix_key,
-        userId,
-      ]
-    );
+    // Atualiza os detalhes bancários na tabela wallets apenas se fornecidos
+    if (hasBankDetails) {
+      await pool.execute(
+        "UPDATE wallets SET bank_name = ?, agency_number = ?, account_number = ? WHERE user_id = ?",
+        [
+          bankDetails.bank_name,
+          bankDetails.agency_number,
+          bankDetails.account_number,
+          userId,
+        ]
+      );
+    }
+
+    // Atualiza a chave PIX se fornecida
+    if (hasPixKey) {
+      await pool.execute(
+        "UPDATE wallets SET pix_key = ? WHERE user_id = ?",
+        [
+          bankDetails.pix_key,
+          userId,
+        ]
+      );
+    }
 
     // Registra a transação na tabela de transações
     await pool.execute(

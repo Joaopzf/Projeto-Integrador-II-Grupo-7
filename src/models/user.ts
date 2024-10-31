@@ -1,4 +1,4 @@
-user.ts: export interface User {
+export interface User {
     id: number;
     username: string;
     password: string;

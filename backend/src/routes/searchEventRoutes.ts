@@ -1,4 +1,3 @@
-// src/routes/eventRoutes.ts
 import express, { Request, Response, Router } from 'express';
 import { searchEvents } from '../services/searchEvents';
 

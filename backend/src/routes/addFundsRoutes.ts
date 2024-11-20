@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { addFunds } from '../services/addFunds'; // Certifique-se de que esse caminho está correto.
+import { addFunds } from '../services/addFunds'; 
 
 const router: Router = express.Router();
 
@@ -8,7 +8,7 @@ const handleAddFunds = async (req: Request, res: Response): Promise<void> => {
         const { userId, amount, bankDetails } = req.body;
 
         // Verificação de dados obrigatórios
-        if (!userId || !amount || !bankDetails) {
+        if (!userId || amount === undefined || !bankDetails) {
             res.status(400).json({ error: 'Campos obrigatórios ausentes: userId, amount, ou bankDetails.' });
             return;
         }
@@ -19,9 +19,18 @@ const handleAddFunds = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        // Validação para garantir que as informações bancárias estejam corretas
-        if (!bankDetails.bank_name || !bankDetails.agency_number || !bankDetails.account_number || !bankDetails.pix_key) {
-            res.status(400).json({ error: 'Informe todos os detalhes bancários: bank_name, agency_number, account_number e pix_key.' });
+        // Verificação se pelo menos os dados bancários ou a chave PIX estão presentes
+        const hasBankDetails = bankDetails.bank_name && bankDetails.agency_number && bankDetails.account_number;
+        const hasPixKey = bankDetails.pix_key;
+
+        if (!hasBankDetails && !hasPixKey) {
+            res.status(400).json({ error: 'É necessário fornecer dados bancários ou uma chave PIX.' });
+            return;
+        }
+
+        // Se dados bancários são fornecidos, valida se estão completos
+        if (hasBankDetails && (!bankDetails.bank_name || !bankDetails.agency_number || !bankDetails.account_number)) {
+            res.status(400).json({ error: 'Informe todos os detalhes bancários: bank_name, agency_number e account_number.' });
             return;
         }
 

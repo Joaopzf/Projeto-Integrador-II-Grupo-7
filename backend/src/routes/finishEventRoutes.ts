@@ -10,7 +10,6 @@ const handleFinishEvent = async (
   try {
     const { event_id, result } = req.body;
 
-    // Supondo que o ID do moderador é passado no cabeçalho da requisição
     const moderatorId = Number(req.headers["moderator-id"]); // Acesso ao ID do moderador via cabeçalho
 
     // Verificação de dados obrigatórios
@@ -20,11 +19,11 @@ const handleFinishEvent = async (
     }
     if (result === undefined || result <= 0) {
       res.status(400).json({ error: "Resultado inválido." });
-      return; // Garantindo que a função termine aqui
+      return; 
     }
     if (!moderatorId) {
       res.status(400).json({ error: "ID do moderador é necessário." });
-      return; // Garantindo que a função termine aqui
+      return; 
     }
 
     const message = await finishEvent({

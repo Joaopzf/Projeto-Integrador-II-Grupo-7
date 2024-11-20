@@ -6,3 +6,9 @@ export interface User {
     date_of_birth?: string | null;
     token?: string; // Adicionando o token aqui
 }
+
+export interface CreditCard {
+    number: string; 
+    expiry: string; 
+    cvv: string;    
+}

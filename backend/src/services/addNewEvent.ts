@@ -23,7 +23,6 @@ export const addNewEvent = async (
     if (error instanceof Error) {
       throw new Error("Erro ao criar o evento: " + error.message);
     } else {
-      // Se não for um objeto `Error`, trate como um erro desconhecido
       throw new Error("Erro desconhecido ao criar o evento.");
     }
   }

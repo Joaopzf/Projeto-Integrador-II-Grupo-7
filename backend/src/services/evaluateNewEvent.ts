@@ -74,7 +74,7 @@ export const evaluateNewEvent = async (
       );
 
       // Envio de e-mail para o criador do evento
-      const eventCreatorId = eventRow.created_by; // Supondo que `created_by` armazena o ID do criador do evento
+      const eventCreatorId = eventRow.created_by; 
       const [creatorRows]: any = await pool.execute(
         "SELECT email FROM users WHERE id = ?",
         [eventCreatorId]
@@ -86,7 +86,7 @@ export const evaluateNewEvent = async (
         const html = `<p>Olá,</p>
                                   <p>Infelizmente, seu evento <strong>${eventRow.name}</strong> foi rejeitado.</p>
                                   <p>Motivo: ${reason}</p`;
-        await sendMail("no-reply@seusite.com", creatorEmail, subject, html); // Ajuste o "from" conforme necessário
+        await sendMail("no-reply@seusite.com", creatorEmail, subject, html); 
       }
       return "Evento rejeitado com sucesso.";
     } else {

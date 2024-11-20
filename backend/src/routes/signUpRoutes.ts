@@ -1,6 +1,6 @@
 import express from 'express';
-import { createUser } from '../services/signUp'; // Ajuste o caminho se necessário
-import { User } from '../models/signUp'; // Ajuste o caminho se necessário
+import { createUser } from '../services/signUp'; 
+import { User } from '../models/signUp'; 
 
 const router = express.Router();
 

@@ -8,7 +8,6 @@ export const searchEvents = async (keyword: string): Promise<any[]> => {
     );
     return rows;
   } catch (error) {
-    // Afirmar que 'error' é do tipo 'Error'
     if (error instanceof Error) {
       throw new Error("Erro ao buscar eventos: " + error.message);
     } else {

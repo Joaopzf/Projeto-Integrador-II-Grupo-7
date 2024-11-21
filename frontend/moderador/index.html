@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Moderador</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Painel do Moderador</h1>
+
+        <!-- Avaliação de Novos Eventos -->
+        <div class="section">
+            <h2>Avaliar Novo Evento</h2>
+            <div class="input-group">
+                <label for="motivo">Motivo da Reprovação (se aplicável)</label>
+                <select id="motivo">
+                    <option value="">Selecione um motivo</option>
+                    <option value="confuso">Texto Confuso</option>
+                    <option value="inapropriado">Texto Inapropriado</option>
+                    <option value="politica">Não respeita a política de privacidade e/ou termos de uso</option>
+                </select>
+            </div>
+            <button class="button">Aprovar Evento</button>
+            <button class="button" onclick="alert('Evento reprovado. O criador será notificado por e-mail.')">Reprovar Evento</button>
+        </div>
+
+        <!-- Finalização de Eventos -->
+        <div class="section">
+            <h2>Finalizar Evento</h2>
+            <p>Informar se o evento ocorreu para distribuir as apostas corretamente.</p>
+            <div class="input-group">
+                <label for="resultado">Resultado do Evento</label>
+                <select id="resultado">
+                    <option value="sim">SIM</option>
+                    <option value="nao">NÃO</option>
+                </select>
+            </div>
+            <button class="button" onclick="alert('Evento finalizado. Fundos distribuídos.')">Finalizar Evento</button>
+        </div>
+    </div>
+</body>
+</html>

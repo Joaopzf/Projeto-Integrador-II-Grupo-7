@@ -1,4 +1,5 @@
 import express from "express";
+import cors from 'cors';
 import evaluateNewEventRoutes from "./routes/evaluateNewEventRoutes";
 import deleteEventRoutes from "./routes/deleteEventRoutes";
 import addFundsRoutes from "./routes/addFundsRoutes";
@@ -12,7 +13,12 @@ import getEventsRoutes from "./routes/getEventsRoutes";
 import loginRoutes from "./routes/loginRoutes";
 
 const app = express();
-app.use(express.json()); // Middleware para parsear JSON
+
+// CORS para permitir requisições do frontend 
+app.use(cors({ origin: 'http://localhost:3001' }));  
+
+// Middleware para parsear JSON
+app.use(express.json());
 
 // Registrar as rotas
 app.use("/api", evaluateNewEventRoutes);
@@ -25,7 +31,7 @@ app.use("/api", betOnEventRoutes);
 app.use("/api", finishEventRoutes);
 app.use('/api', addNewEventRoutes);
 app.use('/api', getEventsRoutes);
-app.use('/api', loginRoutes);
+app.use('/api', loginRoutes);   
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

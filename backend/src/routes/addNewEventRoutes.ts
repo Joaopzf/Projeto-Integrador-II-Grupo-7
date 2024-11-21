@@ -1,3 +1,4 @@
+import pool from '../db/mysql';
 import express, { Request, Response, Router } from 'express';
 import { addNewEvent } from '../services/addNewEvent';
 
@@ -10,6 +11,16 @@ const handleAddNewEvent = async (req: Request, res: Response): Promise<void> => 
         // Verificação de dados obrigatórios
         if (!name || !date || !createdBy) {
             res.status(400).json({ error: 'Campos obrigatórios ausentes: name, date ou createdBy.' });
+            return;
+        }
+
+        // Verifica se o usuário existe
+        const userQuery = 'SELECT id FROM users WHERE id = ?';
+        const [users] = await pool.execute(userQuery, [createdBy]) as [Array<{ id: number }>, any];
+
+        if (users.length === 0) {
+            // Se o usuário não existir, retorna um erro
+            res.status(404).json({ error: 'Usuário não encontrado.' });
             return;
         }
 

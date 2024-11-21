@@ -1,0 +1,34 @@
+body {
+    background-color: #000000;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  header {
+    background-color: #d15fee;
+  }
+  
+  footer {
+    background-color: #d15fee;
+    margin-top: auto;
+  }
+  
+  .btn-custom {
+    background-color: #d15fee;
+    border-color: #d15fee;
+  }
+  
+  .btn-custom:hover {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  .events-container {
+    border: 2px dashed #d15fee;
+    border-radius: 10px;
+    min-height: 300px;
+    color: #d15fee;
+  }

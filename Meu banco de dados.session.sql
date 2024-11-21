@@ -4,8 +4,8 @@
 --     password VARCHAR(255) NOT NULL,
 --     email VARCHAR(255) UNIQUE NOT NULL,
 --     is_moderator BOOLEAN DEFAULT FALSE,
---     date_of_birth DATE NULL
---     token VARCHAR (32) NOT NULL
+--     date_of_birth DATE NULL,
+--     token VARCHAR(32) NULL
 -- );
 
 -- CREATE TABLE transactions (
@@ -33,8 +33,8 @@
 --     id INT AUTO_INCREMENT PRIMARY KEY,
 --     name VARCHAR(255) NOT NULL,
 --     date DATETIME NOT NULL,
---     description TEXT NOT NULL;
---     status ENUM('pending', 'approved', 'rejected', 'finalizado', 'deleted') NOT NULL DEFAULT 'pending', 
+--     description TEXT NOT NULL,
+--     status ENUM('pending', 'approved', 'rejected', 'finalizado', 'deleted') NOT NULL DEFAULT 'pending',
 --     created_by INT NOT NULL, -- ID do usuário que criou o evento
 --     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --     published_at TIMESTAMP NULL, -- Data em que o evento foi publicado
@@ -63,3 +63,4 @@
 --     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
 --     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 -- );
+

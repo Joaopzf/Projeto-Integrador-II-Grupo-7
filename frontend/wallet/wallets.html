@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Wallet</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="main-container">
+    <section class="wallet-box">
+      <h2>Saldo</h2>
+      <p id="balance">R$ 0.00</p>
+    </section>
+    
+    <div class="actions-container">
+      <section class="wallet-box">
+        <h2>Adicionar Fundos</h2>
+        <form id="addFundsForm">
+          <input type="number" id="addAmount" placeholder="Valor a adicionar" required>
+          <input type="text" id="bankName" placeholder="Nome do Banco">
+          <input type="text" id="agencyNumber" placeholder="Número da Agência">
+          <input type="text" id="accountNumber" placeholder="Número da Conta">
+          <input type="text" id="pixKey" placeholder="Chave PIX">
+          <button type="submit" class="btn-custom">Adicionar</button>
+        </form>
+      </section>
+    
+      <section class="wallet-box">
+        <h2>Sacar Fundos</h2>
+        <form id="withdrawFundsForm">
+          <input type="number" id="withdrawAmount" placeholder="Valor a sacar" required>
+          <input type="text" id="withdrawBankName" placeholder="Nome do Banco">
+          <input type="text" id="withdrawAgencyNumber" placeholder="Número da Agência">
+          <input type="text" id="withdrawAccountNumber" placeholder="Número da Conta">
+          <input type="text" id="withdrawPixKey" placeholder="Chave PIX">
+          <button type="submit" class="btn-custom">Sacar</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  
+  <footer>
+    <p>© 2024 Minha Wallet</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,85 +1,94 @@
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "http://localhost:3000/api"; // URL do backend
 
-// Função para atualizar o saldo na interface
-const updateBalance = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/walletBalance?userId=1`);
-    const data = await response.json();
+// Função de login
+document.addEventListener("DOMContentLoaded", function() {
+  const loginForm = document.getElementById("loginForm");
 
-    if (response.ok) {
-      document.getElementById("balance").innerText = `R$ ${data.balance.toFixed(2)}`;
-    } else {
-      throw new Error(data.error || "Erro ao obter saldo.");
-    }
-  } catch (error) {
-    console.error("Erro ao atualizar saldo:", error);
-    alert("Erro ao carregar saldo.");
-  }
-};
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();  // Impede o envio padrão do formulário
 
-// Handler para adicionar fundos
-document.getElementById("addFundsForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
+      // Dados do formulário de login
+      const loginData = {
+        email: document.getElementById("email").value,
+        password: document.getElementById("senha").value,
+      };
 
-  const amount = parseFloat(document.getElementById("addAmount").value);
-  const bankDetails = {
-    bank_name: document.getElementById("bankName").value,
-    agency_number: document.getElementById("agencyNumber").value,
-    account_number: document.getElementById("accountNumber").value,
-    pix_key: document.getElementById("pixKey").value,
-  };
+      try {
+        const response = await fetch("http://localhost:3000/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(loginData),
+        });
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/addFunds`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: 1, amount, bankDetails }),
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Login bem-sucedido!");
+          // Redirecionar ou fazer algo após o login bem-sucedido
+        } else {
+          alert(data.error || "Erro ao fazer login.");
+        }
+      } catch (error) {
+        alert("Erro ao tentar fazer login: " + error.message);
+      }
     });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert(data.message);
-      updateBalance();
-    } else {
-      throw new Error(data.error || "Erro desconhecido.");
-    }
-  } catch (error) {
-    alert(`Erro ao adicionar fundos: ${error.message}`);
+  } else {
+    console.error("Formulário de login não encontrado!");
   }
 });
 
-// Handler para sacar fundos
-document.getElementById("withdrawFundsForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
+//Função de cadastro
+document.addEventListener("DOMContentLoaded", function () {
+  const signupForm = document.getElementById("signupForm");
+  const errorMessage = document.getElementById("errorMessage");
 
-  const amount = parseFloat(document.getElementById("withdrawAmount").value);
-  const bankDetails = {
-    bank_name: document.getElementById("withdrawBankName").value,
-    agency_number: document.getElementById("withdrawAgencyNumber").value,
-    account_number: document.getElementById("withdrawAccountNumber").value,
-    pix_key: document.getElementById("withdrawPixKey").value,
-  };
+  // Verifica se o formulário de cadastro existe
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Impede o envio padrão do formulário
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/withdraw`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: 1, amount, bankDetails }),
+      // Dados do formulário de cadastro
+      const userData = {
+        username: document.getElementById("nome").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("senha").value.trim(),
+        confirmPassword: document.getElementById("confirmarSenha").value.trim(),
+        date_of_birth: document.getElementById("dataNascimento").value || null,
+      };
+
+      // Verifica se as senhas coincidem
+      if (userData.password !== userData.confirmPassword) {
+        errorMessage.textContent = "As senhas não coincidem.";
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      try {
+        // Envia os dados para o backend
+        const response = await fetch(`${API_BASE_URL}/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Cadastro realizado com sucesso!");
+          window.location.href = "login.html"; // Redireciona para login
+        } else {
+          errorMessage.textContent = data.error || "Erro ao cadastrar.";
+          errorMessage.style.display = "block";
+        }
+      } catch (error) {
+        errorMessage.textContent = "Erro ao se conectar com o servidor.";
+        errorMessage.style.display = "block";
+      }
     });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert(data.message);
-      updateBalance();
-    } else {
-      throw new Error(data.error || "Erro desconhecido.");
-    }
-  } catch (error) {
-    alert(`Erro ao sacar fundos: ${error.message}`);
+  } else {
+    console.error("Formulário de cadastro não encontrado!");
   }
 });
 
-// Inicializa o saldo na interface ao carregar a página
-updateBalance();
+

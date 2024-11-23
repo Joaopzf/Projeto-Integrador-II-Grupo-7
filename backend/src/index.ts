@@ -14,8 +14,13 @@ import loginRoutes from "./routes/loginRoutes";
 
 const app = express();
 
-// CORS para permitir requisições do frontend 
-app.use(cors({ origin: 'http://localhost:3001' }));  
+// Configuração do CORS para permitir requisições do frontend no localhost:3001
+app.use(cors({
+  origin: "http://localhost:3001",  // Permite o frontend da porta 3001
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Permite os métodos usados
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Permite os cabeçalhos necessários
+}));
+
 
 // Middleware para parsear JSON
 app.use(express.json());

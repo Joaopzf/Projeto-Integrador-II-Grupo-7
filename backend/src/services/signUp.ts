@@ -8,10 +8,16 @@ export const createUser = async (
 ): Promise<void> => {
   try {
     // Verifica se os campos obrigatórios estão presentes
-    if (!user.username || !user.email || !user.password) {
-      throw new Error("Campos obrigatórios faltando.");
+    if (!user.username || typeof user.username !== 'string') {
+      throw new Error("O campo 'username' é obrigatório.");
     }
-
+    if (!user.email || typeof user.email !== 'string') {
+      throw new Error("O campo 'email' é obrigatório.");
+    }
+    if (!user.password || typeof user.password !== 'string') {
+      throw new Error("O campo 'password' é obrigatório.");
+    }
+    
     // Verificação se o e-mail já existe
     const [rows]: any = await pool.execute(
       "SELECT COUNT(*) AS count FROM users WHERE email = ?",

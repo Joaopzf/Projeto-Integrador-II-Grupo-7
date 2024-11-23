@@ -18,9 +18,9 @@
         <h2>Add Funds</h2>
         <form id="addFundsForm">
           <input type="number" id="addAmount" placeholder="Amount to add" required>
-          <input type="text" id="bankName" placeholder="Bank Name">
-          <input type="text" id="agencyNumber" placeholder="Agency Number">
-          <input type="text" id="accountNumber" placeholder="Account Number">
+          <input type="text" id="bankName" placeholder="Bank Name" required>
+          <input type="text" id="agencyNumber" placeholder="Agency Number" required>
+          <input type="text" id="accountNumber" placeholder="Account Number" required>
           <input type="text" id="pixKey" placeholder="PIX Key">
           <button type="submit" class="btn-custom">Add</button>
         </form>
@@ -30,20 +30,26 @@
         <h2>Withdraw Funds</h2>
         <form id="withdrawFundsForm">
           <input type="number" id="withdrawAmount" placeholder="Amount to withdraw" required>
-          <input type="text" id="withdrawBankName" placeholder="Bank Name">
-          <input type="text" id="withdrawAgencyNumber" placeholder="Agency Number">
-          <input type="text" id="withdrawAccountNumber" placeholder="Account Number">
+          <input type="text" id="withdrawBankName" placeholder="Bank Name" required>
+          <input type="text" id="withdrawAgencyNumber" placeholder="Agency Number" required>
+          <input type="text" id="withdrawAccountNumber" placeholder="Account Number" required>
           <input type="text" id="withdrawPixKey" placeholder="PIX Key">
           <button type="submit" class="btn-custom">Withdraw</button>
         </form>
       </section>
     </div>
   </main>
+
+  <div id="loading" style="display: none;">
+    <img src="loading-spinner.gif" alt="Carregando...">
+  </div>
+
+  <div id="error-message" class="error-message" style="display: none;"></div>
   
   <footer>
     <p>© 2024 My Wallet</p>
   </footer>
 
-  <script src="js/app.js"></script>
+  <script src="../js/app.js"></script>
 </body>
 </html>

@@ -6,6 +6,8 @@ export const loginUser = async (
 ): Promise<{ token: string }> => {
   const { email, password } = loginData;
 
+  console.log("Dados recebidos para login:", loginData);
+
   try {
     // Verifica se o usuário existe
     const [rows]: any = await pool.execute(

@@ -26,6 +26,10 @@ footer {
   color: #000000;
 }
 
+.btn-lg {
+  margin-left: 20px;
+}
+
 .events-container {
   border: 2px dashed #d15fee;
   border-radius: 10px;

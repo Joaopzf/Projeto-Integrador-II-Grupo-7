@@ -51,7 +51,7 @@ h1 {
     color: #ddd;
 }
 
-.input-group select, .input-group textarea {
+.input-group input, .input-group select, .input-group textarea {
     width: 100%;
     padding: 10px;
     background-color: #333;

@@ -1,29 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apostar em Evento</title>
-    <link rel="stylesheet" href="bet.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Place Bet - Future Bet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body>
-    <header>
-        <h1>Apostar em Evento</h1>
+<body style="background-color: #1c1c1c; color: #ffffff;">
+    <header class="py-3 text-center" style="background-color: #d15fee;">
+        <h1>Future Bet</h1>
     </header>
-    <main>
-        <form id="bet-form">
-            <label for="email">Email do Apostador:</label>
-            <input type="email" id="email" name="email" placeholder="Digite seu email" required>
-            
-            <label for="event">Evento:</label>
-            <input type="text" id="event" name="event" placeholder="Nome do evento" required>
-            
-            <label for="amount">Valor da Aposta:</label>
-            <input type="number" id="amount" name="amount" placeholder="Digite o valor" min="1" required>
-            
-            <button type="submit">Apostar</button>
-        </form>
-        <p id="message"></p>
-    </main>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="p-3 shadow-lg" style="width: 100%; max-width: 400px; background-color: #000000; color: #d15fee; border-radius: 10px;">
+            <h3 class="text-center">Place Bet</h3>
+            <form id="placeBetForm">
+                <div class="mb-3">
+                    <input type="email" id="email" class="form-control" placeholder="Email" required />
+                </div>
+                <div class="mb-3">
+                    <input type="text" id="eventId" class="form-control" placeholder="Event ID" required />
+                </div>
+                <div class="mb-3">
+                    <input type="number" id="betAmount" class="form-control" placeholder="Bet Amount" required />
+                </div>
+                <div id="errorMessage" class="text-danger mt-3" style="display: none;"></div>
+                <button type="submit" class="btn btn-custom w-100 mt-3">Place Bet</button>
+            </form>
+            <div class="text-center mt-3">
+                <p><a href="index.html" class="text-decoration-none text-light">Back to Home Page</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-3 text-center" style="background-color: #d15fee; color: #ffffff;">
+        <p class="mb-0">© 2024 Future Bet. All Rights Reserved.</p>
+    </footer>
+
+    <script src="../js/app.js"></script>
 </body>
 </html>

@@ -1,78 +1,42 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #1e1e2f; /* Preto */
-  color: #ffffff; /* Branco */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 20px;
+    background-color: #000000;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }
 
-.container {
-  background: #29293d; /* Roxo escuro */
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  max-width: 500px;
+header {
+    background-color: #d15fee; /* Cor roxa */
+    color: #ffffff; /* Cor do texto em branco */
+    padding: 20px 0; /* Ajuste o padding conforme necessário */
 }
 
-h1 {
-  font-size: 26px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #d4a6ff; /* Roxo claro */
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+header h1 {
+    font-size: 2.5rem; /* Tamanho da fonte do título */
+    margin: 0;
 }
 
-.form-group {
-  margin-bottom: 15px;
+footer {
+    background-color: #d15fee;
+    margin-top: auto;
 }
 
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #d4a6ff; /* Roxo claro */
+.btn-custom {
+    background-color: #d15fee;
+    border-color: #d15fee;
+    color: #ffffff;
 }
 
-input, textarea, button {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #4e4e69; /* Bordas suaves em roxo escuro */
-  border-radius: 6px;
-  font-size: 16px;
-  background-color: #1e1e2f; /* Preto suave */
-  color: #ffffff; /* Texto branco */
+.btn-custom:hover {
+    background-color: #ffffff;
+    color: #000000;
 }
 
-textarea {
-  resize: none;
-}
-
-input:focus, textarea:focus {
-  outline: none;
-  border-color: #8e44ad; /* Roxo vibrante */
-  box-shadow: 0 0 5px #8e44ad;
-}
-
-button {
-  background-color: #8e44ad; /* Roxo vibrante */
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background-color: #732d91; /* Tom mais escuro de roxo */
-  transform: scale(1.05);
-}
-
-button:active {
-  transform: scale(1);
+.events-container {
+    border: 2px dashed #d15fee;
+    border-radius: 10px;
+    min-height: 300px;
+    color: #d15fee;
 }

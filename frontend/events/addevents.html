@@ -16,19 +16,38 @@
             <h3 class="text-center">Add Event</h3>
             <form id="addEventForm">
                 <div class="mb-3">
-                    <input type="text" id="eventId" class="form-control" placeholder="Event ID" required />
+                    <input type="text" id="eventTitle" class="form-control" placeholder="Event Title (max 50 characters)" maxlength="50" required />
                 </div>
                 <div class="mb-3">
-                    <input type="text" id="eventName" class="form-control" placeholder="Event Name" required />
+                    <textarea id="shortDescription" class="form-control" placeholder="Short Description (max 150 characters)" maxlength="150" rows="3" required></textarea>
                 </div>
                 <div class="mb-3">
+                    <input type="number" id="quotaValue" class="form-control" placeholder="Quota Value (minimum 1)" min="1" required />
+                </div>
+
+                <!-- Bet Start Date -->
+                <div class="mb-3">
+                    <label for="betStartDate" class="form-label">Bet Start Date</label>
+                    <input type="datetime-local" id="betStartDate" class="form-control" required />
+                    <small class="text-muted">Select the start date for the betting period</small>
+                </div>
+
+                <!-- Bet End Date -->
+                <div class="mb-3">
+                    <label for="betEndDate" class="form-label">Bet End Date</label>
+                    <input type="datetime-local" id="betEndDate" class="form-control" required />
+                    <small class="text-muted">Select the end date for the betting period</small>
+                </div>
+
+                <!-- Event Date -->
+                <div class="mb-3">
+                    <label for="eventDate" class="form-label">Event Date</label>
                     <input type="datetime-local" id="eventDate" class="form-control" required />
+                    <small class="text-muted">Select the actual event date</small>
                 </div>
-                <div class="mb-3">
-                    <textarea id="eventDetails" class="form-control" placeholder="Event Details" rows="3" required></textarea>
-                </div>
+
                 <div id="errorMessage" class="text-danger mt-3" style="display: none;"></div>
-                <button type="submit" class="btn btn-custom w-100 mt-3">Add Event</button>
+                <button type="submit" class="btn btn-custom w-100 mt-3">Send for Approval</button>
             </form>
             <div class="text-center mt-3">
                 <p><a href="index.html" class="text-decoration-none text-light">Back to Home Page</a></p>

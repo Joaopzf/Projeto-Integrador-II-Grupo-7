@@ -1,70 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Add Event - Future Bet</title>
-    <link rel="stylesheet" href="addNewEvents.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<body>
+    <link rel="stylesheet" href="addNewEvents.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
     <header class="py-3 text-center">
-        <h1 class="future-bet-title">Future Bet</h1>
+      <h1 class="future-bet-title">Future Bet</h1>
     </header>
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="text-center">
-            <div class="event-container">
-                <button id="showFormButton" class="btn btn-custom">Add New Event</button>
-                <div class="purple-box"></div>
-            </div>
-            <div id="formContainer" class="p-3 shadow-lg mt-3" style="width: 100%; max-width: 400px; display: none; border-radius: 10px;">
-                <h3 class="text-center">Add Event</h3>
-                <form id="addEventForm">
-                    <div class="mb-3">
-                        <input type="text" id="eventTitle" class="form-control" placeholder="Event Title (max 50 characters)" maxlength="50" required />
-                    </div>
-                    <div class="mb-3">
-                        <textarea id="shortDescription" class="form-control" placeholder="Short Description (max 150 characters)" maxlength="150" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <input type="number" id="quotaValue" class="form-control" placeholder="Quota Value (minimum 1)" min="1" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="betStartDate" class="form-label">Bet Start Date</label>
-                        <input type="datetime-local" id="betStartDate" class="form-control" required />
-                        <small class="text-muted">Select the start date for the betting period</small>
-                    </div>
-                    <div class="mb-3">
-                        <label for="betEndDate" class="form-label">Bet End Date</label>
-                        <input type="datetime-local" id="betEndDate" class="form-control" required />
-                        <small class="text-muted">Select the end date for the betting period</small>
-                    </div>
-                    <div class="mb-3">
-                        <label for="eventDate" class="form-label">Event Date</label>
-                        <input type="datetime-local" id="eventDate" class="form-control" required />
-                        <small class="text-muted">Select the actual event date</small>
-                    </div>
-                    <div id="errorMessage" class="text-danger mt-3" style="display: none;"></div>
-                    <button type="submit" class="btn btn-custom w-100 mt-3">Send for Approval</button>
-                </form>
-                <div class="text-center mt-3">
-                    <p><a href="index.html" class="text-decoration-none text-light">Back to Home Page</a></p>
-                </div>
-            </div>
+    <div
+      class="container d-flex justify-content-center align-items-center"
+      style="min-height: 80vh"
+    >
+      <div class="text-center">
+        <div class="event-container">
+          <div class="purple-box"></div>
         </div>
+        <div id="formContainer" class="p-3 shadow-lg">
+          <h3 class="text-center">Add Event</h3>
+          <form id="addEventForm">
+            <div class="mb-3">
+              <input
+                type="text"
+                id="eventTitle"
+                class="form-control"
+                placeholder="Event Title (max 50 characters)"
+                maxlength="50"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <textarea
+                id="shortDescription"
+                class="form-control"
+                placeholder="Short Description (max 150 characters)"
+                maxlength="150"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <input
+                type="number"
+                id="quotaValue"
+                class="form-control"
+                placeholder="Quota Value (minimum 1)"
+                min="1"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="betStartDate" class="form-label"
+                >Bet Start Date</label
+              >
+              <input
+                type="datetime-local"
+                id="betStartDate"
+                class="form-control"
+                required
+              />
+              <small class="text-muted"
+                >Select the start date for the betting period</small
+              >
+            </div>
+            <div class="mb-3">
+              <label for="betEndDate" class="form-label">Bet End Date</label>
+              <input
+                type="datetime-local"
+                id="betEndDate"
+                class="form-control"
+                required
+              />
+              <small class="text-muted"
+                >Select the end date for the betting period</small
+              >
+            </div>
+            <div class="mb-3">
+              <label for="eventDate" class="form-label">Event Date</label>
+              <input
+                type="datetime-local"
+                id="eventDate"
+                class="form-control"
+                required
+              />
+              <small class="text-muted">Select the actual event date</small>
+            </div>
+            <div
+              id="errorMessage"
+              class="text-danger mt-3"
+              style="display: none"
+            ></div>
+            <button type="submit" class="btn btn-custom w-100 mt-3">
+              Send for Approval
+            </button>
+          </form>
+          <div class="text-center mt-3">
+            <p>
+              <a
+                href="../homepage/index.html"
+                class="text-decoration-none text-light"
+                >Back to Home Page</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <footer class="py-3 text-center">
-        <p class="mb-0">© 2024 Future Bet. All Rights Reserved.</p>
+      <p class="mb-0">© 2024 Future Bet. All Rights Reserved.</p>
     </footer>
-
-    <script>
-        const showFormButton = document.getElementById('showFormButton');
-        const formContainer = document.getElementById('formContainer');
-
-        showFormButton.addEventListener('click', () => {
-            formContainer.style.display = 'block';
-            showFormButton.style.display = 'none';
-        });
-    </script>
-</body>
+  </body>
 </html>

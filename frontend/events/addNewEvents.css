@@ -1,61 +1,62 @@
 body {
-    background-color: #000000 !important; 
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
+  background-color: #000000 !important;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
 }
 
 header h1.future-bet-title {
-    color: #D15FEE; 
-    font-size: 2.5rem;
-    margin: 0;
+  color: #d15fee;
+  font-size: 2.5rem;
+  margin: 0;
 }
 
 footer {
-    background-color: #D15FEE;
+  background-color: #d15fee;
+  margin-top: auto;
 }
 
 .btn-custom {
-    background-color: #D15FEE;
-    border: 2px solid #D15FEE; 
-    color: #ffffff;
-    font-size: 1rem;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-transform: uppercase;
+  background-color: #d15fee;
+  border: 2px solid #d15fee;
+  color: #ffffff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-transform: uppercase;
 }
 
 .btn-custom:hover {
-    background-color: #ffffff;
-    color: #000000;
-    border-color: #D15FEE;
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #d15fee;
 }
 
 #formContainer {
-    background-color: #000000;
-    color: #D15FEE;
-    border: 1px solid #D15FEE;
-    border-radius: 10px;
+  background-color: #000000;
+  color: #d15fee;
+  border: 1px solid #d15fee;
+  border-radius: 10px;
 }
 
 .text-light {
-    color: #D15FEE !important;
+  color: #d15fee !important;
 }
 
 .event-container {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .purple-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #D15FEE; 
-    z-index: -1; 
-    border-radius: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #d15fee;
+  z-index: -1;
+  border-radius: 10px;
 }

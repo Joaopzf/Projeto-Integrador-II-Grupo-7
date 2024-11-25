@@ -1,0 +1,61 @@
+body {
+    background-color: #000000 !important; 
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header h1.future-bet-title {
+    color: #D15FEE; 
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+footer {
+    background-color: #D15FEE;
+}
+
+.btn-custom {
+    background-color: #D15FEE;
+    border: 2px solid #D15FEE; 
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+.btn-custom:hover {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #D15FEE;
+}
+
+#formContainer {
+    background-color: #000000;
+    color: #D15FEE;
+    border: 1px solid #D15FEE;
+    border-radius: 10px;
+}
+
+.text-light {
+    color: #D15FEE !important;
+}
+
+.event-container {
+    position: relative;
+    display: inline-block;
+}
+
+.purple-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #D15FEE; 
+    z-index: -1; 
+    border-radius: 10px;
+}

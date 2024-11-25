@@ -1,9 +1,5 @@
-export interface Wallet {
-    id: number;
-    user_id: number;
-    balance: number;
-    bank_name?: string;
-    agency_number?: string;
-    account_number?: string;
-    pix_key?: string;
-  }
+export interface CreditCardDetails {
+  card_number: string;    // Número do cartão de crédito (obrigatório)
+  expiry_date: string;    // Data de validade (MM/AA) (obrigatório)
+  cvv: string;            // Código de segurança (CVV) (obrigatório)
+}

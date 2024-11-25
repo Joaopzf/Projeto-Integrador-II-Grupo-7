@@ -1,20 +1,24 @@
 import pool from "../db/mysql";
 
-export interface BankDetails {
-  bank_name?: string; // Campos opcionais
-  agency_number?: string;
-  account_number?: string;
-  pix_key?: string;
+export interface CreditCardDetails {
+  card_number: string;   // Número do cartão de crédito
+  expiry_date: string;   // Data de validade (MM/AA)
+  cvv: string;           // Código de segurança (CVV)
 }
 
 export const addFunds = async (
   userId: number,
   amount: number,
-  bankDetails: BankDetails
+  creditCardDetails: CreditCardDetails
 ): Promise<string> => {
   try {
+
+    if (amount <= 0) {
+      throw new Error("O valor do depósito deve ser maior que zero.");
+    }
+
     console.log(
-      `Tentando adicionar R$ ${amount} à carteira do usuário ${userId}.`
+      `Tentando adicionar R$ ${amount} à carteira do usuário ${userId} utilizando cartão de crédito.`
     );
 
     // Verifica se a carteira do usuário existe
@@ -28,51 +32,37 @@ export const addFunds = async (
       throw new Error("Carteira não encontrada.");
     }
 
-    // Verifica se pelo menos os dados bancários ou a chave PIX foram fornecidos
-    const hasBankDetails = bankDetails.bank_name && bankDetails.agency_number && bankDetails.account_number;
-    const hasPixKey = bankDetails.pix_key;
-
-    if (!hasBankDetails && !hasPixKey) {
-      throw new Error("É necessário fornecer dados bancários ou uma chave PIX.");
+    // Verifica se os dados do cartão de crédito foram fornecidos
+    const hasCreditCardDetails = creditCardDetails.card_number && creditCardDetails.expiry_date && creditCardDetails.cvv;
+    if (!hasCreditCardDetails) {
+      throw new Error("É necessário fornecer os dados completos do cartão de crédito.");
     }
 
-    // Verifica se todos os detalhes bancários estão presentes se eles forem fornecidos
-    if (hasBankDetails && (!bankDetails.bank_name || !bankDetails.agency_number || !bankDetails.account_number)) {
-      throw new Error("Informe todos os detalhes bancários: bank_name, agency_number e account_number.");
+    const isValidCard = validateCreditCard(creditCardDetails);
+    if (!isValidCard) {
+      throw new Error("Dados do cartão de crédito inválidos.");
     }
+
+    // Atualiza os dados do cartão de crédito na tabela 'wallets'
+    await pool.execute(
+      "UPDATE wallets SET card_number = ?, expiry_date = ?, cvv = ? WHERE user_id = ?",
+      [
+        creditCardDetails.card_number,
+        creditCardDetails.expiry_date,
+        creditCardDetails.cvv,
+        userId,
+      ]
+    );
 
     // Converte o saldo atual para número antes de adicionar
     const currentBalance = parseFloat(walletRow.balance);
     const newBalance = currentBalance + amount;
 
+    // Atualiza o saldo da carteira
     await pool.execute("UPDATE wallets SET balance = ? WHERE user_id = ?", [
       newBalance,
       userId,
     ]);
-
-    // Atualiza os detalhes bancários na tabela wallets apenas se fornecidos
-    if (hasBankDetails) {
-      await pool.execute(
-        "UPDATE wallets SET bank_name = ?, agency_number = ?, account_number = ? WHERE user_id = ?",
-        [
-          bankDetails.bank_name,
-          bankDetails.agency_number,
-          bankDetails.account_number,
-          userId,
-        ]
-      );
-    }
-
-    // Atualiza a chave PIX se fornecida
-    if (hasPixKey) {
-      await pool.execute(
-        "UPDATE wallets SET pix_key = ? WHERE user_id = ?",
-        [
-          bankDetails.pix_key,
-          userId,
-        ]
-      );
-    }
 
     // Registra a transação na tabela de transações
     await pool.execute(
@@ -89,4 +79,21 @@ export const addFunds = async (
       throw new Error("Erro desconhecido ao processar o depósito.");
     }
   }
+};
+
+// Função para validar o cartão de crédito (simulação simples)
+const validateCreditCard = (cardDetails: CreditCardDetails): boolean => {
+  // Simulação simples: cartão válido se o número do cartão começa com '4' e a validade não passou
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // Janeiro é mês 1
+
+  const [month, year] = cardDetails.expiry_date.split('/');
+  const expiryMonth = parseInt(month, 10);
+  const expiryYear = parseInt(year, 10) + 2000;
+
+  return (
+    cardDetails.card_number?.startsWith('4') && 
+    expiryYear >= currentYear && 
+    (expiryYear > currentYear || expiryMonth >= currentMonth)
+  );
 };

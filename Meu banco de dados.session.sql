@@ -25,6 +25,9 @@
 --     agency_number VARCHAR(50),
 --     account_number VARCHAR(50),
 --     pix_key VARCHAR(255),
+--     card_number VARCHAR(255),
+--     expiry_date VARCHAR(5),
+--     cvv VARCHAR(3),
 --     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id),
 --     CONSTRAINT unique_user_id UNIQUE (user_id) 
 -- );

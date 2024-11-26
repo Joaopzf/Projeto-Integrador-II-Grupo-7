@@ -1,32 +1,29 @@
 import express, { Request, Response, Router } from 'express';
-import { getEvents } from '../services/getEvents';
+import { getEventsFromDatabase } from '../services/getEvents';
 
 const router: Router = express.Router();
 
+// Função que lida com a requisição de busca de eventos
 const handleGetEvents = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { status } = req.query; // Obtemos o status da query string
+  try {
+    const { search } = req.query;  // Obtém o parâmetro de busca da query string
 
-        // Limpa o status para remover espaços em branco e caracteres de nova linha
-        const cleanedStatus = status ? (status as string).trim() : undefined;
+    // Se não houver busca, faz uma busca por todos os eventos
+    const cleanedSearch = search ? (search as string).trim() : '';
 
-        console.log(`Buscando eventos com status: ${cleanedStatus}`); // Log para depuração
+    console.log(`Buscando eventos com o nome: ${cleanedSearch}`);
 
-        // Chama a função para buscar eventos
-        const events = await getEvents(cleanedStatus);
-        
-        console.log(`Eventos encontrados: ${JSON.stringify(events)}`); // Log para depuração
-        res.status(200).json(events);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: `Erro ao buscar eventos: ${error.message}` });
-        } else {
-            res.status(500).json({ error: 'Erro desconhecido ao buscar eventos.' });
-        }
-    }
+    // Chama a função para buscar eventos no banco de dados
+    const events = await getEventsFromDatabase(cleanedSearch);
+
+    res.status(200).json(events);  // Retorna os eventos encontrados
+  } catch (error) {
+    console.error("Erro ao buscar eventos:", error);
+    res.status(500).json({ error: "Erro ao buscar eventos" });
+  }
 };
 
-// Define a rota para busca de eventos
-router.get('/getEvents', handleGetEvents);
+// Define a rota GET para "/api/events"
+router.get('/events', handleGetEvents);
 
 export default router;

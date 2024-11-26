@@ -1,5 +1,60 @@
 const API_BASE_URL = "http://localhost:3000/api"; // URL do backend
 
+// Função para buscar eventos
+async function fetchEvents(query = "") {
+  try {
+    const response = await fetch(`${API_BASE_URL}/events?search=${encodeURIComponent(query)}`);
+    console.log("Resposta bruta da API:", response); // Log para verificar a resposta
+    if (!response.ok) throw new Error("Failed to fetch events.");
+    const events = await response.json();
+    console.log("Eventos retornados:", events); // Log para verificar os eventos retornados
+    return events;
+  } catch (error) {
+    console.error("Erro ao buscar eventos:", error);
+    return [];
+  }
+}
+
+
+// Renderizar eventos no HTML
+function renderEvents(events) {
+  const eventsContainer = document.querySelector(".events-container");
+  console.log("Renderizando eventos:", events);
+  if (events.length === 0) {
+    eventsContainer.innerHTML = `<p class="text-center">No events found.</p>`;
+  } else {
+    eventsContainer.innerHTML = events
+      .map(
+        (event) => `
+        <div class="card m-2" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">${event.name}</h5>
+            <p class="card-text">${event.description}</p>
+            <a href="#" class="btn btn-primary">Bet Now</a>
+          </div>
+        </div>`
+      )
+      .join("");
+  }
+}
+
+// Função para lidar com a busca de eventos ao clicar no botão "Search"
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.querySelector("input[type='text']");
+  const searchButton = document.querySelector(".btn-custom");
+
+  searchButton.addEventListener("click", async () => {
+    const searchTerm = searchInput.value.trim();
+    const events = await fetchEvents(searchTerm); // Busca os eventos
+    renderEvents(events); // Renderiza os eventos na página
+  });
+
+  // Opcional: carregar eventos ao inicializar a página, se desejar mostrar todos
+  fetchEvents().then((events) => {
+    renderEvents(events);
+  });
+});
+
 // Função de login
 document.addEventListener("DOMContentLoaded", function() {
   const loginForm = document.getElementById("loginForm");

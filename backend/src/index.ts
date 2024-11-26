@@ -25,6 +25,8 @@ app.use('/homepage', express.static(path.join(__dirname, '../../frontend/homepag
   }
 }));
 
+app.use('/js', express.static(path.join(__dirname, '../../frontend/js')));
+
 app.use((req, res, next) => {
   console.log(`Requisição recebida para: ${req.url}`);
   next();

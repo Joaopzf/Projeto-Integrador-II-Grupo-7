@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Apostas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="logo">Sistema de Apostas</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+
+    <div class="container">
+        <aside class="aside">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#home">Início</a></li>
+                <li><a href="#apostas-disponiveis">Apostas Disponíveis</a></li>
+                <li><a href="#apostas-apostadas">Minhas Apostas</a></li>
+                <li><a href="#perfil">Meu Perfil</a></li>
+            </ul>
+        </aside>
+
+        <main class="main">
+            <section>
+                <h3 style="color: blueviolet;">Apostas Disponíveis</h3>
+                <div id="disponiveis-list" class="lista-apostas"></div>
+            </section>
+
+            <section>
+                <h3 style="color: blueviolet;">Apostas efetuadas</h3>
+                <div id="apostadas-list" class="lista-apostas"></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="form-aposta" class="form-container hidden">
+        <h2>Confirme sua Aposta</h2>
+        <form id="aposta-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="number" id="valor" placeholder="Valor" min="1" required>
+            <button type="button" onclick="fecharFormulario()" class="cancel-btn">Cancelar</button>
+            <button type="submit" class="confirm-btn">Confirmar</button>
+        </form>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,1 +1,1 @@
-select * from events;
+select *  from wallets;

@@ -55,6 +55,144 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const balanceElement = document.getElementById("balance");
+  const loadingElement = document.getElementById("loading");
+  const errorMessageElement = document.getElementById("error-message");
+
+  // Função para atualizar o saldo
+  const updateBalance = async () => {
+    try {
+      const response = await fetch('/api/wallet'); // Ajuste para a URL correta
+      if (!response.ok) throw new Error('Erro ao buscar o saldo');
+      const data = await response.json();
+      balanceElement.textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.balance);
+    } catch (error) {
+      console.error(error);
+      errorMessageElement.textContent = "Erro ao carregar o saldo.";
+      errorMessageElement.style.display = "block";
+    }
+  };
+
+  // Adicionar fundos
+  document.getElementById("addFundsForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    loadingElement.style.display = "block";
+
+    const amount = parseFloat(document.getElementById("addAmount").value);
+    const cardNumber = document.getElementById("cardNumber").value;
+    const expiryDate = document.getElementById("expiryDate").value;
+    const cvv = document.getElementById("cvv").value;
+
+    // Validação de dados
+    if (isNaN(amount) || amount <= 0) {
+      errorMessageElement.textContent = "Por favor, insira um valor válido.";
+      errorMessageElement.style.display = "block";
+      loadingElement.style.display = "none";
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/addFunds', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ amount, cardNumber, expiryDate, cvv })
+      });
+
+      if (!response.ok) throw new Error('Erro ao adicionar fundos');
+
+      await updateBalance(); // Atualiza o saldo após adicionar fundos
+      document.getElementById("addFundsForm").reset(); // Limpa o formulário
+      alert("Fundos adicionados com sucesso!"); // Mensagem de sucesso
+    } catch (error) {
+      console.error(error);
+      errorMessageElement.textContent = "Erro ao adicionar fundos.";
+      errorMessageElement.style.display = "block";
+    } finally {
+      loadingElement.style.display = "none";
+    }
+  });
+
+  // Retirar fundos
+  document.getElementById("withdrawFundsForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    loadingElement.style.display = "block";
+
+    const amount = parseFloat(document.getElementById("withdrawAmount").value);
+    const bankName = document.getElementById("withdrawBankName").value;
+    const agencyNumber = document.getElementById("withdrawAgencyNumber").value;
+    const accountNumber = document.getElementById("withdrawAccountNumber").value;
+    const pixKey = document.getElementById("withdrawPixKey").value;
+
+    // Validação de dados
+    if (isNaN(amount) || amount <= 0) {
+      errorMessageElement.textContent = "Por favor, insira um valor válido.";
+      errorMessageElement.style.display = "block";
+      loadingElement.style.display = "none";
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    console.log("Token:", token);
+    if (!token) {
+      console.error("Token não encontrado no localStorage");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/withdraw', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          amount,
+          bankDetails: {
+              bankName,
+              agencyNumber,
+              accountNumber,
+              pixKey
+          }
+      })
+  });
+
+      const errorData = await response.json();
+      if (!response.ok) {
+          console.log("Erro do servidor:", errorData); // Log da resposta do servidor
+          throw new Error(errorData.message || 'Erro ao retirar fundos');
+      }
+
+      await updateBalance(); // Atualiza o saldo após retirar fundos
+      document.getElementById("withdrawFundsForm").reset(); // Limpa o formulário
+      alert("Fundos retirados com sucesso!");
+        alert("Fundos retirados com sucesso!"); // Mensagem de sucesso
+      } catch (error) {
+        console.error(error);
+        errorMessageElement.textContent = "Erro ao retirar fundos.";
+        errorMessageElement.style.display = "block";
+      } finally {
+        loadingElement.style.display = "none";
+      }
+  });
+  
+  // Atualiza o saldo ao carregar a página
+  updateBalance();
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const walletButton = document.getElementById("walletButton");
+  if (walletButton) {
+    walletButton.addEventListener("click", function() {
+      window.location.href = "http://localhost:3001/wallet/wallets.html"; 
+    });
+  } else {
+    console.error("Botão da carteira não encontrado!");
+  }
+});
+
 // Função de login
 document.addEventListener("DOMContentLoaded", function() {
   const loginForm = document.getElementById("loginForm");
@@ -89,8 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("userToken", data.token);  // Armazenando o token
             console.log("Token armazenado no localStorage:", localStorage.getItem("userToken"));
             alert("Login bem-sucedido!");
-            console.log("Redirecionando para: http://localhost:3000/frontend/homepage/index.html");
-            window.location.href = "http://localhost:3000/frontend/homepage/index.html";  // Caminho absoluto
+            console.log("Redirecionando para: http://localhost:3001/homepage/index.html");
+            window.location.href = "http://localhost:3001/homepage/index.html";            
           } else {
             console.error("Token não encontrado na resposta");
             alert("Erro: O token não foi gerado.");
@@ -107,6 +245,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.error("Formulário de login não encontrado!");
   }
 });
+
 
 //Função de cadastro
 document.addEventListener("DOMContentLoaded", function () {

@@ -1,4 +1,4 @@
-import pool from "../db/mysql"; // Importando a conexão com o banco de dados
+import pool from "../db/mysql"; 
 import { User, CreditCard } from "../models/signUp"; 
 
 export const createUser = async (

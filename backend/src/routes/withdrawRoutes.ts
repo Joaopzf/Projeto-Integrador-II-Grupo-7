@@ -1,44 +1,58 @@
-import express, { Request, Response, Router } from "express";
-import { withdrawFundsWithTax } from "../services/withdrawFunds";
-const router: Router = express.Router();
-const handleWithdraw = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { userId, amount, bankDetails } = req.body;
-    // Verificação de dados obrigatórios
-    if (!userId || !amount || !bankDetails) {
-      res.status(400).json({
-        error: "Campos obrigatórios ausentes: userId, amount, ou bankDetails.",
-      });
-      return;
+import express, { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { Wallet } from '../models/wallets'; 
+import { getWalletById } from '../services/walletService'; 
+
+const router = express.Router();
+
+// Interface personalizada para incluir propriedades adicionais se necessário
+interface CustomRequest extends Request {
+    userId?: number; 
+}
+
+// Rota para processar saques
+router.post('/withdraw', async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1]; // Supondo que o token é enviado no cabeçalho Authorization
+        if (!token) {
+            res.status(401).json({ error: 'Token não fornecido' });
+            return;
+        }
+
+        // Verifica e decodifica o token
+        const decoded: any = jwt.verify(token, 'projetointegrador'); // Substitua pela sua chave secreta
+        const userId = Number(decoded.userId); // Convertendo para number
+        if (isNaN(userId)) {
+            res.status(401).json({ error: 'User  ID inválido' });
+            return;
+        }
+
+        const { amount, bankDetails } = req.body;
+        const { bankName, agencyNumber, accountNumber, pixKey } = bankDetails; // Extraindo os detalhes do banco
+
+        // Verifique se todos os campos necessários estão definidos
+        if (!amount || !bankDetails || !bankName || !agencyNumber || !accountNumber) {
+            res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+            return;
+        }
+
+        // Aqui você pode adicionar a lógica para processar o saque
+        // Exemplo: Verifique se o usuário tem saldo suficiente na carteira
+        const wallet: Wallet | null = await getWalletById(userId);
+        if (!wallet || wallet.balance < amount) {
+            res.status(400).json({ error: 'Saldo insuficiente' });
+            return;
+        }
+
+        // Lógica para processar o saque (exemplo fictício)
+        // await processWithdrawal(userId, amount, bankDetails);
+
+        res.status(200).json({ message: 'Saque processado com sucesso.' });
+    } catch (error) {
+        console.error('Erro ao processar o saque:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        next(error); // Passa o erro para o próximo middleware
     }
-    // Validação para garantir que o valor seja positivo
-    if (amount <= 0) {
-      res
-        .status(400)
-        .json({ error: "O valor do saque deve ser maior que zero." });
-      return;
-    }
-    // Validação para garantir que as informações bancárias estejam corretas
-    if (!bankDetails.bank_name && !bankDetails.pix_key) {
-      res.status(400).json({
-        error:
-          "Informe pelo menos um método de recebimento: banco ou chave PIX.",
-      });
-      return;
-    }
-    const message = await withdrawFundsWithTax(userId, amount, bankDetails);
-    res.status(200).json({ message });
-  } catch (error) {
-    if (error instanceof Error) {
-      res
-        .status(500)
-        .json({ error: `Erro ao processar o saque: ${error.message}` });
-    } else {
-      res
-        .status(500)
-        .json({ error: "Erro desconhecido ao processar o saque." });
-    }
-  }
-};
-router.post("/withdraw", handleWithdraw);
+});
+
 export default router;

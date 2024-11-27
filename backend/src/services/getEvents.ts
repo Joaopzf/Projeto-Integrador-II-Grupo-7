@@ -1,11 +1,10 @@
-import pool from '../db/mysql';  // Certifique-se de importar a conexão corretamente
+import pool from '../db/mysql'; 
 
 export const getEventsFromDatabase = async (search: string) => {
   try {
-    const query = `SELECT id, name, date, description, status FROM events WHERE name LIKE ?`;
+    const query = `SELECT id, name, date, description, status FROM events WHERE name LIKE ? AND status = 'approved'`;
     const [rows] = await pool.execute(query, [`%${search}%`]);
 
-    // Agora rows já é um array de objetos, então podemos mapear diretamente
     const events = (rows as Array<any>).map((event) => ({
       id: event.id,
       name: event.name,

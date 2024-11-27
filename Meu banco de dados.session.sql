@@ -5,7 +5,7 @@
 --     email VARCHAR(255) UNIQUE NOT NULL,
 --     is_moderator BOOLEAN DEFAULT FALSE,
 --     date_of_birth DATE NULL,
---     token VARCHAR(32) NULL
+--     token VARCHAR(512) NULL
 -- );
 
 -- CREATE TABLE transactions (

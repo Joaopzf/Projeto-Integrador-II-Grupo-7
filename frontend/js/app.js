@@ -232,6 +232,109 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
+// Função para adicionar fundos
+async function addFunds(userId, amount, creditCardDetails) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/add-funds`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('userToken')}` // Use o token armazenado
+      },
+      body: JSON.stringify({
+        userId,
+        amount,
+        creditCardDetails
+      })
+    });
 
+    if (!response.ok) {
+      throw new Error('Erro ao adicionar fundos: ' + response.statusText);
+    }
+
+    const data = await response.json();
+    console.log(data.message); // Mensagem de sucesso
+    alert("Fundos adicionados com sucesso!");
+  } catch (error) {
+    console.error('Erro:', error);
+    alert("Erro ao adicionar fundos: " + error.message);
+  }
+}
+
+// Manipulador de evento para o formulário de adicionar fundos
+document.addEventListener("DOMContentLoaded", () => {
+  const addFundsForm = document.getElementById("addFundsForm");
+
+  if (addFundsForm) {
+    addFundsForm.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Impede o envio padrão do formulário
+
+      const userId = localStorage.getItem("userId"); // Obtenha o ID do usuário do localStorage
+      const amount = parseFloat(document.getElementById("addAmount").value); // Obtenha o valor a ser adicionado
+      const creditCardDetails = {
+        card_number: document.getElementById("cardNumber").value,
+        expiry_date: document.getElementById("expiryDate").value,
+        cvv: document.getElementById("cvv").value
+      };
+
+      await addFunds(userId, amount, creditCardDetails);
+    });
+  } else {
+    console.error("Formulário de adicionar fundos não encontrado!");
+  }
+});
+
+// Função para retirar fundos
+async function withdrawFunds(userId, amount, bankDetails) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/withdraw-funds`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('userToken')}` // Use o token armazenado
+      },
+      body: JSON.stringify({
+        userId,
+        amount,
+        bankDetails
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao retirar fundos: ' + response.statusText);
+    }
+
+    const data = await response.json();
+    console.log(data.message); // Mensagem de sucesso
+    alert("Fundos retirados com sucesso!");
+  } catch (error) {
+    console.error('Erro:', error);
+    alert("Erro ao retirar fundos: " + error.message);
+  }
+}
+
+// Adicionar manipulador de evento para o formulário de retirar fundos
+document.addEventListener("DOMContentLoaded", () => {
+  const withdrawFundsForm = document.getElementById("withdrawFundsForm");
+
+  if (withdrawFundsForm) {
+    withdrawFundsForm.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Impede o envio padrão do formulário
+
+      const userId = localStorage.getItem("userId"); // Obtenha o ID do usuário do localStorage
+      const amount = parseFloat(document.getElementById("withdrawAmount").value); // Obtenha o valor a ser retirado
+      const bankDetails = {
+        bank_name: document.getElementById("withdrawBankName").value,
+        agency_number: document.getElementById("withdrawAgencyNumber").value,
+        account_number: document.getElementById("withdrawAccountNumber").value,
+        pix_key: document.getElementById("withdrawPixKey").value
+      };
+
+      await withdrawFunds(userId, amount, bankDetails);
+    });
+  } else {
+    console.error("Formulário de retirar fundos não encontrado!");
+  }
+});
 
 

@@ -1,55 +1,29 @@
 import express, { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { Wallet } from '../models/wallets'; 
-import { getWalletById } from '../services/walletService'; 
+import { withdrawFunds } from '../services/withdrawFunds'; // Certifique-se de que o caminho está correto
+import authenticateToken from '../middleware/authenticator'; // Importando o middleware
 
 const router = express.Router();
 
 // Interface personalizada para incluir propriedades adicionais se necessário
 interface CustomRequest extends Request {
-    userId?: number; 
+    user?: any; 
 }
 
-// Rota para processar saques
-router.post('/withdraw', async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
+// Rota para retirar fundos da carteira
+router.post('/withdraw-funds', authenticateToken, async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Supondo que o token é enviado no cabeçalho Authorization
-        if (!token) {
-            res.status(401).json({ error: 'Token não fornecido' });
+        const userId = req.user.id; // Obtém o ID do usuário do objeto user
+        if (!userId) {
+            res.status(400).json({ error: 'User  ID is required' });
             return;
         }
 
-        // Verifica e decodifica o token
-        const decoded: any = jwt.verify(token, 'projetointegrador'); // Substitua pela sua chave secreta
-        const userId = Number(decoded.userId); // Convertendo para number
-        if (isNaN(userId)) {
-            res.status(401).json({ error: 'User  ID inválido' });
-            return;
-        }
+        const { amount, bankDetails }: { amount: number; bankDetails: any } = req.body; // Inclua bankDetails
 
-        const { amount, bankDetails } = req.body;
-        const { bankName, agencyNumber, accountNumber, pixKey } = bankDetails; // Extraindo os detalhes do banco
-
-        // Verifique se todos os campos necessários estão definidos
-        if (!amount || !bankDetails || !bankName || !agencyNumber || !accountNumber) {
-            res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
-            return;
-        }
-
-        // Aqui você pode adicionar a lógica para processar o saque
-        // Exemplo: Verifique se o usuário tem saldo suficiente na carteira
-        const wallet: Wallet | null = await getWalletById(userId);
-        if (!wallet || wallet.balance < amount) {
-            res.status(400).json({ error: 'Saldo insuficiente' });
-            return;
-        }
-
-        // Lógica para processar o saque (exemplo fictício)
-        // await processWithdrawal(userId, amount, bankDetails);
-
-        res.status(200).json({ message: 'Saque processado com sucesso.' });
+        const result = await withdrawFunds(userId, amount, bankDetails); // Chama a função withdrawFunds com todos os argumentos
+        res.status(200).json(result); // Retorna o resultado da retirada de fundos
     } catch (error) {
-        console.error('Erro ao processar o saque:', error);
+        console.error('Erro ao retirar fundos:', error);
         res.status(500).json({ error: 'Internal server error' });
         next(error); // Passa o erro para o próximo middleware
     }

@@ -87,18 +87,20 @@ export const addFunds = async (
 
 // Função para validar o cartão de crédito 
 const validateCreditCard = (cardDetails: CreditCardDetails): boolean => {
-  // Simula a validação verificando se o cartão começa com '4' e se a validade ainda está ativa
   const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1; 
+  const currentMonth = new Date().getMonth() + 1;
 
-  const [month, year] = cardDetails.expiry_date.split('/'); 
-  const expiryMonth = parseInt(month, 10);  
-  const expiryYear = parseInt(year, 10) + 2000; 
+  const [month, year] = cardDetails.expiry_date.split('/');
+  const expiryMonth = parseInt(month, 10);
+  const expiryYear = parseInt(year, 10) + 2000;
 
-  // Verifica se o cartão é válido
+  // Apenas verifica se o número do cartão é composto de 16 dígitos
+  const isValidCardNumber = /^\d{16}$/.test(cardDetails.card_number);
+
   return (
-    cardDetails.card_number?.startsWith('4') &&  // Número do cartão começa com '4'
-    expiryYear >= currentYear &&                // Ano de validade maior ou igual ao atual
-    (expiryYear > currentYear || expiryMonth >= currentMonth) // Mês válido no ano corrente
+    isValidCardNumber &&                          // Número do cartão válido
+    expiryYear >= currentYear &&                  // Validade do ano
+    (expiryYear > currentYear || expiryMonth >= currentMonth) // Validade do mês
   );
 };
+

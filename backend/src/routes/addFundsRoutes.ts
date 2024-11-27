@@ -1,65 +1,39 @@
-// Importa as dependencias necessarias do express
-import express, { Request, Response, Router } from 'express';
-// Importa a função addFunds, que vai lidar com a lógica de adicionar fundos
+import express, { Request, Response, NextFunction } from 'express';
 import { addFunds } from '../services/addFunds'; 
+import { CreditCardDetails } from '../models/wallets'; 
+import authenticateToken from '../middleware/authenticator'; // Importando o middleware
 
+const router = express.Router();
 
-// Criando uma instância do Router do Express para definir as rotas
-const router: Router = express.Router();
+// Interface personalizada para incluir propriedades adicionais se necessário
+interface CustomRequest extends Request {
+    user?: any; 
+}
 
-// Função responsável por lidar com a requisição de adicionar fundos à conta do usuário
-const handleAddFunds = async (req: Request, res: Response): Promise<void> => {
+// Rota para adicionar fundos à carteira
+router.post('/add-funds', authenticateToken, async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // Desestruturando os dados da requisição
-        const { userId, amount, bankDetails } = req.body;
-
-        // Verificação de dados obrigatórios
-        // Se faltar algum campo essencial (userId, amount ou bankDetails), retorna um erro 400
-        if (!userId || amount === undefined || !bankDetails) {
-            res.status(400).json({ error: 'Campos obrigatórios ausentes: userId, amount, ou bankDetails.' });
+        const userId = req.user.id; // Obtém o ID do usuário do objeto user
+        if (!userId) {
+            res.status(400).json({ error: 'User  ID is required' });
             return;
         }
 
-        // Validação para garantir que o valor seja positivo
-        if (amount <= 0) {
-            res.status(400).json({ error: 'O valor a ser adicionado deve ser maior que zero.' });
+        const { amount, creditCardDetails }: { amount: number; creditCardDetails: CreditCardDetails } = req.body;
+
+        // Verifique se creditCardDetails está definido
+        if (!creditCardDetails) {
+            res.status(400).json({ error: 'Credit card details are required' });
             return;
         }
 
-        // Verificação se pelo menos os dados bancários ou a chave PIX estão presentes
-        const hasBankDetails = bankDetails.bank_name && bankDetails.agency_number && bankDetails.account_number;
-        const hasPixKey = bankDetails.pix_key;
-
-        if (!hasBankDetails && !hasPixKey) {
-            res.status(400).json({ error: 'É necessário fornecer dados bancários ou uma chave PIX.' });
-            return;
-        }
-
-        // Se dados bancários são fornecidos, valida se estão completos
-        if (hasBankDetails && (!bankDetails.bank_name || !bankDetails.agency_number || !bankDetails.account_number)) {
-            res.status(400).json({ error: 'Informe todos os detalhes bancários: bank_name, agency_number e account_number.' });
-            return;
-        }
-
-        // Chama a função addFunds para processar o depósito com os dados fornecidos
-        const message = await addFunds(userId, amount, bankDetails);
-
-        // Retorna uma resposta com o status 200 caso o depósito seja processado com sucesso
-        res.status(200).json({ message });
+        const result = await addFunds(userId, amount, creditCardDetails);
+        res.status(200).json(result); // Retorna o resultado da adição de fundos
     } catch (error) {
-        // Tratamento de erro, se algum erro ocorrer durante o processo
-        if (error instanceof Error) {
-            // Se o erro for uma instância da classe Error, retorna o erro com a mensagem
-            res.status(500).json({ error: `Erro ao processar o depósito: ${error.message}` });
-        } else {
-             // Para outros erros desconhecidos, retorna uma mensagem genérica
-            res.status(500).json({ error: 'Erro desconhecido ao processar o depósito.' });
-        }
+        console.error('Erro ao adicionar fundos:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        next(error); // Passa o erro para o próximo middleware
     }
-};
+});
 
-// Definindo a rota POST para a funcionalidade de adicionar fundos
-router.post('/addFunds', handleAddFunds);
-
-// Exportando o roteador para ser utilizado em outros módulos
 export default router;

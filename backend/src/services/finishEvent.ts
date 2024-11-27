@@ -5,6 +5,7 @@ export interface FinishEventDetails {
   eventId: number;       
   result: number;  // Resultado do evento (valor a ser distribuído)
   moderatorId: number;   
+}
 
 // Função para finalizar um evento
 export const finishEvent = async ({

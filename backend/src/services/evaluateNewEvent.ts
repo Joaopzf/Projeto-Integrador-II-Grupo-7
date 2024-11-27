@@ -1,11 +1,12 @@
-import pool from "../db/mysql"; // Importando o pool de conexão
+import pool from "../db/mysql"; // Importando o pool de conexão com o banco de dados
 import { sendMail } from "../mailService"; // Importando o serviço de envio de e-mail
 
+// Função para avaliar um evento (aprovar ou rejeitar)
 export const evaluateNewEvent = async (
-  eventId: string,
-  moderatorId: string,
-  action: "approve" | "reject",
-  reason?: string
+  eventId: string,       
+  moderatorId: string,     
+  action: "approve" | "reject", 
+  reason?: string          
 ): Promise<string> => {
   try {
     console.log(
@@ -47,7 +48,7 @@ export const evaluateNewEvent = async (
 
     // Inicia a avaliação do evento
     if (action === "approve") {
-      // Atualiza o status do evento
+      // Atualiza o status do evento para "approved"
       await pool.execute("UPDATE events SET status = ? WHERE id = ?", [
         "approved",
         eventId,
@@ -61,19 +62,19 @@ export const evaluateNewEvent = async (
 
       return "Evento aprovado com sucesso.";
     } else if (action === "reject") {
-      // Atualiza o status do evento e insere a razão de rejeição
+      // Atualiza o status do evento para "rejected"
       await pool.execute("UPDATE events SET status = ? WHERE id = ?", [
         "rejected",
         eventId,
       ]);
 
-      // Insere a avaliação na tabela event_evaluations
+      // Insere a avaliação na tabela event_evaluations com a razão de rejeição
       await pool.execute(
         "INSERT INTO event_evaluations (event_id, moderator_id, action, reason) VALUES (?, ?, ?, ?)",
         [eventId, moderatorId, action, reason]
       );
 
-      // Envio de e-mail para o criador do evento
+      // Envio de e-mail para o criador do evento informando sobre a rejeição
       const eventCreatorId = eventRow.created_by; 
       const [creatorRows]: any = await pool.execute(
         "SELECT email FROM users WHERE id = ?",
@@ -85,8 +86,8 @@ export const evaluateNewEvent = async (
         const subject = `Evento Rejeitado: ${eventRow.name}`;
         const html = `<p>Olá,</p>
                                   <p>Infelizmente, seu evento <strong>${eventRow.name}</strong> foi rejeitado.</p>
-                                  <p>Motivo: ${reason}</p`;
-        await sendMail("no-reply@seusite.com", creatorEmail, subject, html); 
+                                  <p>Motivo: ${reason}</p>`;
+        await sendMail("no-reply@seusite.com", creatorEmail, subject, html); // Envia o e-mail
       }
       return "Evento rejeitado com sucesso.";
     } else {

@@ -1,3 +1,4 @@
+// define a interface Event, que descreve a estrutura de um evento com mais detalhes
 export interface Event {
     id: string; // ou number, dependendo do tipo do ID no seu banco de dados
     name: string;

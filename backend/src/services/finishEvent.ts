@@ -1,15 +1,16 @@
-import pool from "../db/mysql";
+import pool from "../db/mysql"; // Importando o pool de conexão com o banco de dados
 
+// Interface que define os detalhes necessários para finalizar um evento
 export interface FinishEventDetails {
-  eventId: number;
-  result: number;
-  moderatorId: number;
-}
+  eventId: number;       
+  result: number;  // Resultado do evento (valor a ser distribuído)
+  moderatorId: number;   
 
+// Função para finalizar um evento
 export const finishEvent = async ({
-  eventId,
-  result,
-  moderatorId,
+  eventId,       
+  result,   // Resultado do evento (valor a ser distribuído)
+  moderatorId,    
 }: FinishEventDetails): Promise<string> => {
   try {
     console.log(
@@ -40,6 +41,7 @@ export const finishEvent = async ({
       throw new Error("Evento não encontrado.");
     }
 
+    // Se o evento já foi finalizado, retorna uma mensagem
     if (event.status === "finalizado") {
       return "O evento já foi finalizado."; // Retorna mensagem sem lançar erro
     }
@@ -60,7 +62,7 @@ export const finishEvent = async ({
       return "Evento finalizado, mas não há vencedores para distribuir os fundos."; 
     }
 
-    // Atualiza as carteiras dos vencedores proporcionalmente
+    // Atualiza as carteiras dos vencedores proporcionalmente ao valor apostado
     await pool.execute(
       `
             UPDATE wallets w

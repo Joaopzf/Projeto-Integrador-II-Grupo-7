@@ -1,3 +1,4 @@
+// Define a interface CreditCardDetails, que descreve a estrutura de dados para os detalhes de um cartão de crédito
 export interface CreditCardDetails {
   card_number: string;    // Número do cartão de crédito (obrigatório)
   expiry_date: string;    // Data de validade (MM/AA) (obrigatório)

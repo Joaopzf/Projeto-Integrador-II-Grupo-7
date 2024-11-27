@@ -7,7 +7,7 @@ const JWT_SECRET = 'projetointegrador'; // Chave secreta para gerar o token
 export const loginUser = async (loginData: Login): Promise<{ token: string }> => {
   const { email, password } = loginData;
 
-  console.log("Dados recebidos para login:", loginData);
+  console.log("Dados recebidos para login:", loginData); // Log dos dados recebidos
 
   try {
     // Verifica se o usuário existe no banco

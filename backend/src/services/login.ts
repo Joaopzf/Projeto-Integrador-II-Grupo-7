@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'; // Biblioteca JWT
 
 const JWT_SECRET = 'projetointegrador'; // Chave secreta para gerar o token
 
-export const loginUser = async (loginData: Login): Promise<{ token: string }> => {
+export const loginUser  = async (loginData: Login): Promise<{ token: string; userId: number }> => {
   const { email, password } = loginData;
 
   console.log("Dados recebidos para login:", loginData); // Log dos dados recebidos
@@ -35,8 +35,8 @@ export const loginUser = async (loginData: Login): Promise<{ token: string }> =>
     const result = await pool.execute("UPDATE users SET token = ? WHERE email = ?", [token, email]);
     console.log("Resultado da atualização do token no banco:", result);
 
-    // Retorna o token ao frontend
-    return { token };
+    // Retorna o token e o userId ao frontend
+    return { token, userId: user.id }; 
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Erro ao processar login:", error.message);

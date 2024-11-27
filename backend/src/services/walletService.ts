@@ -1,8 +1,14 @@
 import pool from '../db/mysql'; 
 import { Wallet } from '../models/wallets'; 
 
+// Enum para tipos de transação
+enum TransactionType {
+    DEPOSITO = 'deposito',
+    RETIRADA = 'retirada'
+}
+
 // Função para registrar uma transação
-async function recordTransaction(userId: number, amount: number, transactionType: 'deposito' | 'retirada'): Promise<void> {
+async function recordTransaction(userId: number, amount: number, transactionType: TransactionType): Promise<void> {
     await pool.query('INSERT INTO transactions (user_id, amount, transaction_type) VALUES (?, ?, ?)', [userId, amount, transactionType]);
 }
 
@@ -16,15 +22,15 @@ async function getWalletById(userId: number): Promise<Wallet | null> {
 }
 
 // Função para atualizar o saldo da carteira
-async function updateWalletBalance(userId: number, amount: number, transactionType: 'deposito' | 'retirada'): Promise<Wallet | null> {
+async function updateWalletBalance(userId: number, amount: number, transactionType: TransactionType): Promise<Wallet | null> {
     const wallet = await getWalletById(userId);
     if (!wallet) {
-        throw new Error('Wallet not found');
+        throw new Error('Carteira não encontrada');
     }
 
     // Verifica se a retirada não excede o saldo
-    if (transactionType === 'retirada' && wallet.balance + amount < 0) {
-        throw new Error('Insufficient balance for withdrawal');
+    if (transactionType === TransactionType.RETIRADA && wallet.balance + amount < 0) {
+        throw new Error('Saldo insuficiente para retirada');
     }
 
     const newBalance = wallet.balance + amount;
@@ -34,4 +40,4 @@ async function updateWalletBalance(userId: number, amount: number, transactionTy
     return getWalletById(userId);
 }
 
-export { getWalletById, updateWalletBalance };
+export { getWalletById, updateWalletBalance, TransactionType };

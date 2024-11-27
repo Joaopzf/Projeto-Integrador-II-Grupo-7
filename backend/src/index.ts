@@ -13,6 +13,8 @@ import finishEventRoutes from "./routes/finishEventRoutes";
 import addNewEventRoutes from "./routes/addNewEventRoutes";
 import getEventsRoutes from "./routes/getEventsRoutes";
 import loginRoutes from "./routes/loginRoutes";
+import walletRoutes from "./routes/walletRoutes";
+require('dotenv').config();
 
 const app = express();
 
@@ -65,7 +67,8 @@ app.use("/api", betOnEventRoutes);
 app.use("/api", finishEventRoutes);
 app.use('/api', addNewEventRoutes);
 app.use('/api', getEventsRoutes);
-app.use('/api', loginRoutes);   
+app.use('/api', loginRoutes); 
+app.use('/api', walletRoutes);  
 
 // Para servir o arquivo static da homepage
 app.get('/frontend/homepage/index.html', (req, res) => {

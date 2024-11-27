@@ -1,6 +1,5 @@
-// Importa o roteador do Express 
 import { Router } from 'express';
-import { loginUser } from '../services/login'; // Importa a função loginUser do serviço responsável por autenticar o usuário
+import { loginUser  } from '../services/login'; // Importa a função loginUser  do serviço responsável por autenticar o usuário
 import { Login } from '../models/login'; // Importa o modelo Login para tipagem
 
 // Cria uma instância de Router para gerenciar as rotas relacionadas ao login
@@ -12,11 +11,11 @@ router.post('/login', async (req, res) => {
     const loginData: Login = req.body;
 
     try {
-        // Chama a função loginUser para autenticar o usuário e retorna o token de autenticação
-        const { token } = await loginUser(loginData);
+        // Chama a função loginUser  para autenticar o usuário e retorna o token de autenticação e o userId
+        const { token, userId } = await loginUser (loginData); // Certifique-se de que loginUser  retorna userId
 
-        // Retorna uma resposta HTTP com status 200 e o token gerado no formato JSON
-        res.status(200).json({ token });
+        // Retorna uma resposta HTTP com status 200 e o token e userId gerados no formato JSON
+        res.status(200).json({ token, userId }); // Inclua o userId na resposta
     } catch (error: unknown) {
         // Caso ocorra algum erro, verifica se é uma instância de Error
         if (error instanceof Error) {

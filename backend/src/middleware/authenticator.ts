@@ -9,9 +9,12 @@ interface CustomRequest extends Request {
 
 dotenv.config();
 
-const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction) => {
+const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction): void => {
     const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) return res.sendStatus(401); // Não autorizado
+    if (!token) {
+        res.sendStatus(401);
+        return; 
+    }
 
     const secret = process.env.ACCESS_TOKEN_SECRET;
     if (!secret) {
@@ -19,9 +22,12 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
     }
 
     jwt.verify(token, secret, (err: any, user: any) => {
-        if (err) return res.sendStatus(403); // Proibido
+        if (err) {
+            res.sendStatus(403); // Proibido
+            return; // Interrompe a execução da função
+        }
         req.user = user; // Anexar o usuário ao objeto de requisição
-        next();
+        next(); // Chama o próximo middleware
     });
 };
 

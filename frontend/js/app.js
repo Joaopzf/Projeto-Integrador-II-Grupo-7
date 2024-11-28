@@ -430,39 +430,3 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("ID do usuário não encontrado no localStorage");
   }
 });
-
-// function loadPurchaseHistory() {
-//   const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-//   const purchaseTableBody = document.getElementById('purchase-history').querySelector('tbody');
-
-//   purchaseHistory.forEach(purchase => {
-//       const row = document.createElement('tr');
-//       row.innerHTML = `
-//           <td>${new Date(purchase.date).toLocaleDateString()}</td>
-//           <td>${purchase.amount.toFixed(2)}</td>
-//           <td>${purchase.status}</td>
-//       `;
-//       purchaseTableBody.appendChild(row);
-//   });
-// }
-
-// function loadCreditUsageHistory() {
-//   const creditUsageHistory = JSON.parse(localStorage.getItem('creditUsageHistory')) || [];
-//   const creditTableBody = document.getElementById('credit-usage-history').querySelector('tbody');
-
-//   creditUsageHistory.forEach(usage => {
-//       const row = document.createElement('tr');
-//       row.innerHTML = `
-//           <td>${new Date(usage.date).toLocaleDateString()}</td>
-//           <td>${usage.amount.toFixed(2)}</td>
-//           <td>${usage.result}</td>
-//       `;
-//       creditTableBody.appendChild(row);
-//   });
-// }
-
-// // Chame as funções ao carregar a página
-// window.addEventListener('load', () => {
-//   loadPurchaseHistory();
-//   loadCreditUsageHistory();
-// });

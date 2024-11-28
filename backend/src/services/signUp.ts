@@ -1,25 +1,14 @@
 import pool from "../db/mysql"; 
 import { User, CreditCard } from "../models/signUp"; 
 
-// Função para criar um novo usuário, com opção de saldo inicial e cartão de crédito
 export const createUser = async (
-  user: User,  // Dados do usuário
-  initialWalletBalance?: number,  // Saldo inicial da carteira 
-  creditCard?: CreditCard  // Cartão de crédito 
-): Promise<void> => {
+  user: User,  
+  initialWalletBalance?: number,  
+  creditCard?: CreditCard  
+): Promise<{userId : number} > => {
   try {
-    // Verificação dos campos obrigatórios
-    if (!user.username || typeof user.username !== 'string') {
-      throw new Error("O campo 'username' é obrigatório.");
-    }
-    if (!user.email || typeof user.email !== 'string') {
-      throw new Error("O campo 'email' é obrigatório.");
-    }
-    if (!user.password || typeof user.password !== 'string') {
-      throw new Error("O campo 'password' é obrigatório.");
-    }
-    
-    // Verifica se o e-mail já está cadastrado no banco de dados
+    // Verificação dos campos obrigatórios e verificação do e-mail
+
     const [rows]: any = await pool.execute(
       "SELECT COUNT(*) AS count FROM users WHERE email = ?",
       [user.email]
@@ -30,28 +19,28 @@ export const createUser = async (
       throw new Error("E-mail já cadastrado. Por favor, realize o login.");
     }
 
-    // Caso o campo 'date_of_birth' seja fornecido, ele será utilizado, senão será nulo
-    const dateOfBirth = user.date_of_birth ? user.date_of_birth : null;
-
     // Insere o novo usuário no banco de dados
     await pool.execute(
       "INSERT INTO users (username, email, password, date_of_birth) VALUES (?, ?, ?, ?)",
-      [user.username, user.email, user.password, dateOfBirth]
+      [user.username, user.email, user.password, user.date_of_birth]
     );
 
-    // Obtém o ID do novo usuário inserido
     const [newUserRows]: any = await pool.execute(
       "SELECT LAST_INSERT_ID() AS id"
     );
-    const newUserId = newUserRows[0].id;
-
-    // Cria a carteira para o novo usuário com saldo inicial de 0
+    const newUserId = newUserRows[0]?.id; // Verifique se o ID está correto.
+    
+    if (!newUserId) {
+      throw new Error("Falha ao obter o ID do novo usuário.");
+    }
+    
+    // Insere a carteira com saldo inicial de 0
     await pool.execute(
       "INSERT INTO wallets (user_id, balance) VALUES (?, ?)",
       [newUserId, 0]
     );
 
-    // Se o saldo inicial for fornecido e um cartão de crédito válido for passado, atualiza a carteira
+    // Se o saldo inicial for fornecido, atualiza a carteira
     if (initialWalletBalance !== undefined && creditCard) {
       await pool.execute(
         "UPDATE wallets SET balance = ? WHERE user_id = ?",
@@ -59,14 +48,14 @@ export const createUser = async (
       );
     }
 
-    // Confirmação de sucesso na criação do usuário
-    console.log(`Usuário ${user.username} criado com sucesso.`);
-  } catch (error) {
-    // Caso ocorra um erro, captura a mensagem do erro e lança uma exceção
+    // Retorna o newUserId na resposta para o frontend
+    return { userId: newUserId };
+  } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(error.message);  // Log da mensagem de erro
+      console.error("Erro ao criar usuário:", error.message);
       throw new Error(`Erro ao criar usuário: ${error.message}`);
     } else {
+      console.error("Erro desconhecido ao criar usuário.");
       throw new Error("Erro desconhecido ao criar usuário.");
     }
   }

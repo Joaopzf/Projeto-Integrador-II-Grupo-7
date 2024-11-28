@@ -1,1 +1,3 @@
-select * from transactions;
+select * from wallets;
+select * from users;
+

@@ -54,12 +54,11 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
-//Função de cadastro
+//Função de Cadastro
 document.addEventListener("DOMContentLoaded", function () {
   const signupForm = document.getElementById("signupForm");
   const errorMessage = document.getElementById("errorMessage");
 
-  // Verifica se o formulário de cadastro existe
   if (signupForm) {
     signupForm.addEventListener("submit", async (event) => {
       event.preventDefault(); // Impede o envio padrão do formulário
@@ -91,6 +90,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await response.json();
 
         if (response.ok) {
+          // Armazena o userId no localStorage após o sucesso do cadastro
+          if (data.userId) {
+            localStorage.setItem("userId", data.userId); // Armazenando o ID do usuário
+          }
+
           alert("Cadastro realizado com sucesso!");
           window.location.href = "login.html"; // Redireciona para login
         } else {
@@ -106,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Formulário de cadastro não encontrado!");
   }
 });
+
 
 // Função para buscar eventos
 async function fetchEvents(query = "") {
@@ -195,18 +200,24 @@ document.addEventListener("DOMContentLoaded", () => {
           const data = await response.json();
           console.log("Saldo recebido:", data);
 
-          if (balanceElement) {
+          if (data.balance !== undefined && data.balance !== null) {
+            // Se o saldo foi retornado corretamente
+            if (balanceElement) {
               balanceElement.textContent = new Intl.NumberFormat('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
+                style: 'currency',
+                currency: 'BRL',
               }).format(data.balance);
+            }
           } else {
-              throw new Error("Elemento com ID 'balance' não encontrado");
+            // Caso o saldo não seja encontrado ou seja 0, mostramos uma mensagem personalizada
+            if (balanceElement) {
+              balanceElement.textContent = "Você ainda não possui saldo.";
+            }
           }
       } catch (error) {
           console.error("Erro ao buscar o saldo:", error);
           if (errorMessageElement) {
-              errorMessageElement.textContent = "Erro ao carregar o saldo.";
+              errorMessageElement.textContent = "Erro ao carregar o saldo. Tente novamente mais tarde";
               errorMessageElement.style.display = "block";
           }
       } finally {
@@ -359,11 +370,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
           const errorData = await response.json();
+          if (errorData.message && errorData.message.includes("Nenhuma transação encontrada")) {
+            return []; 
+          }
           throw new Error(errorData.message || 'Erro ao buscar transações');
         }
 
         const transactions = await response.json();
-        return transactions;
+
+        return transactions.length > 0 ? transactions : [];
       } catch (error) {
         console.error('Erro ao buscar transações:', error);
         alert("Erro ao buscar transações: " + error.message);
@@ -386,7 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
       transactionsTableBody.innerHTML = "";
   
       if (transactions.length === 0) {
-        transactionsTableBody.innerHTML = `<tr><td colspan="4" class="text-center">Sem transações encontradas.</td></tr>`;
+        transactionsTableBody.innerHTML = `<tr><td colspan="4" class="text-center">Ainda não há transações para este usuário.</td></tr>`;
       } else {
         transactions.forEach(transaction => {
           const transactionType = transaction.transaction_type === 'deposito' ? 'Depósito' : 'Retirada';

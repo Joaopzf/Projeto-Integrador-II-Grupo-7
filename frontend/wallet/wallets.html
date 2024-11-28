@@ -8,85 +8,61 @@
   </head>
   <body>
     <main class="main-container">
-      <section class="wallet-box">
-        <h2>Balance</h2>
-        <p id="balance">$ 0.00</p>
-      </section>
+      <section class="wallet-balance" style="background-color: #1a1a1a; padding: 35px; border-radius: 10px; text-align: center; width: 50%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <h2 style="color: white;">Saldo</h2>
+        <p id="balance" style="color: #d15fee; font-size: 1.8em; font-weight: bold;">R$ 0,00</p>
+    </section>         
 
       <div class="actions-container">
         <section class="wallet-box">
-          <h2>Add Funds</h2>
+          <h2>Adicionar Créditos</h2>
           <form id="addFundsForm">
-            <input
-              type="number"
-              id="addAmount"
-              placeholder="Amount to add"
-              required
-            />
-            <input
-              type="text"
-              id="cardNumber"
-              placeholder="Card Number"
-              required
-            />
-            <input
-              type="text"
-              id="expiryDate"
-              placeholder="Expiry Date (MM/YY)"
-              required
-            />
-            <input
-              type="text"
-              id="cvv"
-              placeholder="CVV"
-              required
-            />
-            <button type="submit" class="btn-custom">Add</button>
+            <input type="number" id="addAmount" placeholder="Valor (R$)" required />
+            <input type="text" id="cardNumber" placeholder="Número do Cartão" required />
+            <input type="text" id="expiryDate" placeholder="Validade (MM/AA)" required />
+            <input type="text" id="cvv" placeholder="CVV" required />
+            <button type="submit" class="btn-custom">Adicionar</button>
           </form>
         </section>
 
         <section class="wallet-box">
-          <h2>Withdraw Funds</h2>
+          <h2>Sacar Saldo</h2>
           <form id="withdrawFundsForm">
-            <input
-              type="number"
-              id="withdrawAmount"
-              placeholder="Amount to withdraw"
-              required
-            />
-            <input
-              type="text"
-              id="withdrawBankName"
-              placeholder="Bank Name"
-              required
-            />
-            <input
-              type="text"
-              id="withdrawAgencyNumber"
-              placeholder="Agency Number"
-              required
-            />
-            <input
-              type="text"
-              id="withdrawAccountNumber"
-              placeholder="Account Number"
-              required
-            />
-            <input type="text" id="withdrawPixKey" placeholder="PIX Key" />
-            <button type="submit" class="btn-custom">Withdraw</button>
+            <input type="number" id="withdrawAmount" placeholder="Valor (R$)" required />
+            <input type="text" id="withdrawBankName" placeholder="Banco" required />
+            <input type="text" id="withdrawAgencyNumber" placeholder="Agência" required />
+            <input type="text" id="withdrawAccountNumber" placeholder="Conta Corrente" required />
+            <input type="text" id="withdrawPixKey" placeholder="Chave PIX (opcional)" />
+            <button type="submit" class="btn-custom">Sacar</button>
           </form>
         </section>
       </div>
+
+    <section class="history-container">
+        <h2>Histórico de Transações</h2>
+        <table id="transaction-history">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th>Valor (R$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Linhas do histórico serão carregadas dinamicamente -->
+          </tbody>
+        </table>
+      </section>
     </main>
 
-    <div id="loading" style="display: none">
+    <div id="loading" class="loading" style="display: none">
       <img src="loading-spinner.gif" alt="Carregando..." />
     </div>
 
     <div id="error-message" class="error-message" style="display: none"></div>
 
     <footer>
-      <p>&copy; 2024 Future Bet. All Rights Reserved.</p>
+      <p>&copy; 2024 Future Bet. Todos os direitos reservados.</p>
     </footer>
 
     <script type="module" src="../js/app.js"></script>

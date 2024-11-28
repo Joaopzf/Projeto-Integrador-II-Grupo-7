@@ -14,6 +14,7 @@ import addNewEventRoutes from "./routes/addNewEventRoutes";
 import getEventsRoutes from "./routes/getEventsRoutes";
 import loginRoutes from "./routes/loginRoutes";
 import walletRoutes from "./routes/walletRoutes";
+import transactionsRouter from "./routes/transactionsRouter"; 
 require('dotenv').config();
 
 const app = express();
@@ -69,6 +70,7 @@ app.use('/api', addNewEventRoutes);
 app.use('/api', getEventsRoutes);
 app.use('/api', loginRoutes); 
 app.use('/api', walletRoutes);  
+app.use("/api", transactionsRouter);
 
 // Para servir o arquivo static da homepage
 app.get('/frontend/homepage/index.html', (req, res) => {

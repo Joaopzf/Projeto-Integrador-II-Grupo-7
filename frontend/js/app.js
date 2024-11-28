@@ -337,4 +337,117 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM completamente carregado.");
+  const userId = localStorage.getItem("userId");
 
+  if (userId) {
+    // Função para buscar transações
+    async function fetchTransactions(userId) {
+      try {
+        const token = localStorage.getItem("userToken");
+        if (!token || !userId) {
+          throw new Error("Token ou ID do usuário não encontrados");
+        }
+
+        const response = await fetch(`${API_BASE_URL}/transactions/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Erro ao buscar transações');
+        }
+
+        const transactions = await response.json();
+        return transactions;
+      } catch (error) {
+        console.error('Erro ao buscar transações:', error);
+        alert("Erro ao buscar transações: " + error.message);
+        return [];
+      }
+    }
+
+    // Função para renderizar transações na tabela
+    function renderTransactions(transactions) {
+      const transactionsTableBody = document.querySelector("#transaction-history tbody");
+      console.log(transactionsTableBody);
+      if (!transactionsTableBody) {
+        console.error("Elemento tbody não encontrado!");
+        return;
+      }
+      
+      console.log("Transações recebidas:", transactions); // Log para verificar os dados
+  
+      // Limpar as transações anteriores (caso haja)
+      transactionsTableBody.innerHTML = "";
+  
+      if (transactions.length === 0) {
+        transactionsTableBody.innerHTML = `<tr><td colspan="4" class="text-center">Sem transações encontradas.</td></tr>`;
+      } else {
+        transactions.forEach(transaction => {
+          const transactionType = transaction.transaction_type === 'deposito' ? 'Depósito' : 'Retirada';
+          const formattedAmount = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(transaction.amount);
+          const formattedDate = new Date(transaction.created_at).toLocaleString('pt-BR');
+  
+          // Criar uma nova linha da tabela
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${formattedDate}</td>
+            <td>${transactionType}</td>
+            <td>${formattedAmount}</td>
+          `;
+          
+          // Adicionar a linha à tabela
+          transactionsTableBody.appendChild(row);
+        });
+      }
+    }    
+
+    // Buscar transações e renderizá-las
+    fetchTransactions(userId).then(transactions => {
+      renderTransactions(transactions); // Renderiza as transações na tabela
+    });
+  } else {
+    console.error("ID do usuário não encontrado no localStorage");
+  }
+});
+
+// function loadPurchaseHistory() {
+//   const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+//   const purchaseTableBody = document.getElementById('purchase-history').querySelector('tbody');
+
+//   purchaseHistory.forEach(purchase => {
+//       const row = document.createElement('tr');
+//       row.innerHTML = `
+//           <td>${new Date(purchase.date).toLocaleDateString()}</td>
+//           <td>${purchase.amount.toFixed(2)}</td>
+//           <td>${purchase.status}</td>
+//       `;
+//       purchaseTableBody.appendChild(row);
+//   });
+// }
+
+// function loadCreditUsageHistory() {
+//   const creditUsageHistory = JSON.parse(localStorage.getItem('creditUsageHistory')) || [];
+//   const creditTableBody = document.getElementById('credit-usage-history').querySelector('tbody');
+
+//   creditUsageHistory.forEach(usage => {
+//       const row = document.createElement('tr');
+//       row.innerHTML = `
+//           <td>${new Date(usage.date).toLocaleDateString()}</td>
+//           <td>${usage.amount.toFixed(2)}</td>
+//           <td>${usage.result}</td>
+//       `;
+//       creditTableBody.appendChild(row);
+//   });
+// }
+
+// // Chame as funções ao carregar a página
+// window.addEventListener('load', () => {
+//   loadPurchaseHistory();
+//   loadCreditUsageHistory();
+// });
